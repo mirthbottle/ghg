@@ -1,0 +1,34 @@
+Consumer Discretionary,51,1,,,,,
+Consumer Staples,37,4,,,,,
+Energy,16,2,,,,,
+Financials,53,2,,,,,
+Health Care,30,1,,,,,
+Industrials,44,1,,,,,
+Information Technology,55,4,,,,,
+Materials,23,3,,,,,
+Telecommunications Services,5,0,,,,,
+Utilities,21,1,,,,,
+,,,,,,,
+,,,,,,,
+,,,,,,,
+Company,Industry,2013 Disclosure Score,2013 Performance Score,2012 Disclosure Score,2012 Performance Score,Scope 1,Scope 2
+News Corporation,Consumer Discretionary,97,A-,95,B,62360,376022
+"Coca-Cola Enterprises, Inc. ",Consumer Staples,90,A-,92,B,124399,89882
+"Constellation Brands, Inc. ",Consumer Staples,85,B,72,C,67717,37914
+Kraft Foods ,Consumer Staples,81,B,84,B,477813,695225
+Mondelēz International Inc. ,Consumer Staples,91,B,,,1075761,954755
+ConocoPhillips ,Energy,83,B,81,C,24171000,1638000
+Hess Corporation ,Energy,97,B,97,B,7409486,584695
+BNY Mellon,Financials,100,A,90,B,9513,208926
+NYSE Euronext,Financials,99,A,96,A,2594,77407
+Abbott Laboratories ,Health Care,84,B,80,B,470781,537821
+Eaton Corporation ,Industrials,100,A-,96,A,105382,637346
+"Cisco Systems, Inc. ",Information Technology,100,A,96,B,65832,628164
+EMC Corporation,Information Technology,97,A,91,B,45886,368528
+Hewlett-Packard ,Information Technology,99,A,92,B,246000,1643000
+"Autodesk, Inc.",Information Technology,99,A,93,A,2169,3400
+Alcoa Inc. ,Materials,87,B,91,B,29842159,16659736
+Dow Chemical Company ,Materials,90,B,91,B,27429000,8403000
+MeadWestvaco Corp. ,Materials,98,B,93,B,2830432,564034
+"Praxair, Inc. ",Materials,98,B,95,A-,5355000,11329000
+Exelon Corporation ,Utilities,98,A,94,A,26038890,5691542

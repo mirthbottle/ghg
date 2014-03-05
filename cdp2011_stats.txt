@@ -1,0 +1,142 @@
+# 2013 stats
+
+
+# 2011 stats
+
+Industrials : 55
+with all scopes : 23
+
+ABB
+Atlas Copco
+Boeing
+Canadian National Railway
+Caterpillar
+CSX
+Deere
+Deutsche Post
+FedEx
+Hitachi
+ITC
+Komatsu
+Larsen & Toubro
+Lockheed Martin
+Mitsubishi
+Northrop Grumman
+Rolls-Royce
+Saint-Gobain
+Schneider Electric
+Siemens
+United Technologies
+UPS
+Vinci
+
+
+Information Technology : 39
+with all scopes : 20
+
+Consumer Staples :
+with all scopes : 25
+food
+
+Altria Group
+Ambev - Cia. Bebidas das Americas
+Anheuser Busch InBev
+British American Tobacco
+Carrefour
+Coca-Cola Company
+Colgate Palmolive
+CVS Caremark
+Danone
+Diageo
+General Mills
+Kellogg Company
+Kimberly-Clark
+Kraft Foods
+L’Oreal
+Nestle
+PepsiCo
+Philip Morris International
+Reckitt Benckiser
+SABMiller
+Seven & I Holding
+Tesco
+Wal-Mart de Mexico
+Wal-Mart Stores
+Woolworths
+
+
+
+Materials :
+with all scopes : 26
+
+Air Products & Chemicals
+Anglo American
+Anglo Platinum
+Antofagasta
+BASF
+BHP Billiton
+Cia. Siderurgica Nacional - CSN
+Dow Chemical
+E.I. du Pont de Nemours and Company
+Freeport-McMoRan Copper & Gold
+FujiFilm Holdings
+Holcim
+Impala Platinum Holdings
+Israel Chemicals
+Kumba Iron Ore
+Lafarge
+Linde
+Mosaic Company
+Newcrest Mining
+Newmont Mining
+POSCO
+Praxair
+Rio Tinto
+Syngenta International
+Teck
+VALE
+
+
+
+Consumer Discretionary : 
+with all scopes : 27
+car companies in 
+
+BMW Bayerische Motoren werke
+Carnival
+Daimler
+eBay
+Fiat
+H&M Hennes & Mauritz
+Home Depot
+Honda Motor Company
+Hyundai Motor
+Inditex
+Johnson Controls
+Kohl’s
+LVMH
+Metro
+News Corporation
+NIKE
+Nissan Motor
+Panasonic
+Philips Electronics
+PPR
+Rogers Communications
+Target
+Time Warner
+TJX Companies
+Toyota Motor
+Vivendi Universal
+Volkswagen
+
+
+Financials :
+
+Energy :
+
+Utilities : 
+
+Has all Scopes : 264
+
+ 
