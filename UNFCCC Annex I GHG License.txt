@@ -1,0 +1,31 @@
+CAIT 2.0 Beta - WRI’s Climate Data Explorer
+Last Update: March 18th 2014
+
+-----------------------------------------------------------
+Citation	
+WRI, CAIT 2.0. 2013. Climate Analysis Indicators Tool: WRI’s Climate Data Explorer. Washington, DC: World Resources Institute. Available at: http://cait2.wri.org.	
+		
+-----------------------------------------------------------
+Reuse	
+
+Except as noted below, all CAIT data carries a Creative Commons Attribution-NonCommercial 4.0 International license. This means CAIT 2.0 data and analysis can be used in non-commercial applications, provided clear attribution to WRI/CAIT is given. For commercial/for-profit uses, please contact us via wcait@wri.org. Find more information on http://creativecommons.org/licenses/by-nc/4.0/ and http://www.wri.org/publications/permissions-licensing
+
+		
+-----------------------------------------------------------
+Data sources	
+
+CAIT 2.0 UNFCCC data derives directly from United Nations Framework Convention on Climate Change (UNFCCC) Secretariat	
+	
+Additionally to citing CAIT 2.0 please consider citing  UNFCCC data source that CAIT 2.0 is using:	
+		
+United Nations Framework Convention on Climate Change (UNFCCC) Secretariat. 2013. "Time Series – Annex I." Bonn: UNFCCC. Available at: http://unfccc.int/ghg_data/ghg_data_unfccc/time_series_annex_i/items/3814.php	
+	
+
+Additional information for specific country sources can be found at: http://unfccc.int/ghg_data/ghg_data_unfccc/data_sources/items/3816.php	
+		
+		
+		
+		
+		
+		
+		

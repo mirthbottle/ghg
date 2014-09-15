@@ -1,0 +1,39 @@
+CAIT 2.0 - WRI’s Climate Data Explorer			
+Last Update: 20 May, 2014			
+		
+			
+------------------------------------------------------			
+Citation:
+WRI, CAIT 2.0. 2014. Climate Analysis Indicators Tool: WRI’s Climate Data Explorer. Washington, DC: World Resources Institute. Available at: http://cait2.wri.org
+
+		
+-----------------------------------------------------			
+Reuse:	
+
+Except as noted below, all CAIT data carries a Creative Commons Attribution-NonCommercial 4.0 International license. This means CAIT 2.0 data and analysis can be used in non-commercial applications, provided clear attribution to WRI/CAIT is given. For commercial/for-profit uses, please contact us via wcait@wri.org. Find more information on http://creativecommons.org/licenses/by-nc/4.0/ and http://www.wri.org/publications/permissions-licensing	
+
+Data for Land-Use and Forestry indicator are provided by the Food and Agriculture Organization of the United Nations (FAO). WRI has been granted a non-exclusive, non-transferrable right to publish these data. Therefore, if users wish to republish this dataset in whole or in part, they should contact FAO directly at copyright@fao.org		
+
+Additionally to citing CAIT 2.0 please consider citing the data sources that CAIT 2.0 is using.		
+			
+-----------------------------------------------------
+Data sources:
+
+Carbon Dioxide Information Analysis Center
+	Boden, T.A., G. Marland, and R.J. Andres. 2013. Global, Regional, and National Fossil-Fuel CO2 Emissions. Carbon Dioxide Information Analysis Center, Oak Ridge National Laboratory, U.S. Department of Energy, Oak Ridge, Tenn., U.S.A. doi 10.3334/CDIAC/00001_V2013. Available online at: http://cdiac.ornl.gov/trends/emis/overview_2010.html.  	
+	
+Food and Agriculture Organization of the United Nations
+	Food and Agriculture Organization of the United Nations (FAO). 2014. FAOSTAT. Rome, Italy: FAO. Available at: http://faostat3.fao.org/faostat-gateway/go/to/download/G2/*/E	
+	
+International Energy Agency	
+	International Energy Agency (IEA).  2013. CO2 Emissions from Fuel Combustion (2013 edition).  Paris, France: OECD/IEA. Available online at: http://data.iea.org/ieastore/statslisting.asp.  © OECD/IEA, [2013]. 
+	
+The World Bank	
+	World Bank. 2014. World Development Indicators 2014. Washington, DC. Available at: http://data.worldbank.org/ Last Accessed April 10th, 2014	
+
+U.S. Energy Information Administration
+	U.S. Energy Information Administration (EIA).  2013. International Energy Statistics Washington, DC: U.S. Department of Energy. Available online at: http://www.eia.gov/countries/data.cfm	
+	
+U.S. Environmental Protection Agency
+	U.S. Environmental Protection Agency (EPA). 2012. “Global Non-CO2 GHG Emissions: 1990-2030.” Washington, DC: EPA. Available at: http://www.epa.gov/climatechange/EPAactivities/economics/nonco2projections.html.	
+			
