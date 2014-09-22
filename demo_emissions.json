@@ -1,29 +1,39 @@
 {
  "name": "global ghg production",
  "children": [
-  {
-   "name": "China", "size": 10552,
+  {"name": "China", "size": 10552,
    "children": [
-    {"name": "cluster"},
-    {"name": "graph"},
-    {"name": "optimization"}
+    {"name": "energy", "size": 8392,
+     "children": [
+      {"name": "electricity", "size": 4266},
+      {"name": "manufacturing", "size": 2487},
+      {"name": "transportation", "size": 623},
+      {"name": "fugitive", "size": 304},
+      {"name": "other fuels", "size": 710}
+     ]
+    },
+    {"name": "industrial processes", "size": 1255},
+    {"name": "agriculture", "size": 708},
+    {"name": "waste", "size": 196},
+    {"name": "fuels", "size": 48}
    ]
   },
   {
    "name": "United States", "size": 6550,
    "children": [
-    {"name": "Easing", "size": 170},
-    {"name": "FunctionSequence", "size": 584},
-    {"name": "interpolate"},
-    {"name": "ISchedulable", "size": 104},
-    {"name": "Parallel", "size": 51},
-    {"name": "Pause", "size": 44},
-    {"name": "Scheduler", "size": 55},
-    {"name": "Sequence", "size": 553},
-    {"name": "Transition", "size": 92},
-    {"name": "Transitioner", "size": 199},
-    {"name": "TransitionEvent", "size": 111},
-    {"name": "Tween", "size": 60}
+    {"name": "energy", "size": 5670,
+     "children": [
+      {"name": "electricity", "size": 2478},
+      {"name": "manufacturing", "size": 597},
+      {"name": "transportation", "size": 1638},
+      {"name": "fugitive", "size": 330},
+      {"name": "other fuels", "size": 627}
+     ]
+    },
+    {"name": "industrial processes", "size": 243},
+    {"name": "agriculture", "size": 472},
+    {"name": "waste", "size": 163},
+    {"name": "fuels", "size": 148}
    ]
   },
   {
