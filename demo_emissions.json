@@ -1,6 +1,15 @@
 {
  "name": "global ghg production",
  "children": [
+  {"name": "Other", "size": 16094,
+   "children": [
+    {"name": "axis", "size": 1600},
+    {"name": "controls", "size": 1000},
+    {"name": "events", "size": 200},
+    {"name": "legend", "size": 500},
+    {"name": "Visualization", "size": 16}
+   ]
+  },
   {"name": "China", "size": 10552,
    "children": [
     {"name": "energy", "size": 8392,
@@ -78,13 +87,6 @@
    "children": [
     {"name": "Arrays", "size": 82},
     {"name": "Colors", "size": 10},
-    {
-     "name": "heap",
-     "children": [
-      {"name": "FibonacciHeap", "size": 93},
-      {"name": "HeapNode", "size": 12}
-     ]
-    },
     {"name": "IEvaluable", "size": 33},
     {"name": "IPredicate", "size": 38},
     {"name": "IValueProxy", "size": 87},
@@ -116,16 +118,6 @@
     {"name": "LinearScale", "size": 131},
     {"name": "LogScale", "size": 31},
     {"name": "OrdinalScale", "size": 37}
-   ]
-  },
-  {
-   "name": "Other", "size": 16094,
-   "children": [
-    {"name": "axis"},
-    {"name": "controls"},
-    {"name": "events"},
-    {"name": "legend"},
-    {"name": "Visualization", "size": 16}
    ]
   }
  ]
