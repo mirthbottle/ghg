@@ -1,0 +1,50 @@
+{
+ "name": "global ghg sources",
+ "children": [
+  {"name": "energy", "size": 33536,
+   "children": [
+    {"name": "Other", "size": 15483},
+    {"name": "China", "size": 8392},
+    {"name": "USA", "size": 5670},
+    {"name": "India", "size": 1913},
+    {"name": "Russia", "size": 2076}
+   ]
+  },
+  {"name": "industrial processes", "size": 2744,
+   "children": [
+    {"name": "Other", "size": 1015},
+    {"name": "China", "size": 1255},
+    {"name": "USA", "size": 243},
+    {"name": "India", "size": 161},
+    {"name": "Russia", "size": 67}
+   ]
+  },
+  {"name": "agriculture", "size": 6053,
+   "children": [
+    {"name": "Other", "size": 4362},
+    {"name": "China", "size": 708},
+    {"name": "USA", "size": 472},
+    {"name": "India", "size": 352},
+    {"name": "Russia", "size": 158}
+   ]
+  },
+  {"name": "waste", "size": 1483,
+   "children": [
+    {"name": "Other", "size": 992},
+    {"name": "China", "size": 196},
+    {"name": "USA", "size": 163},
+    {"name": "India", "size": 52},
+    {"name": "Russia", "size": 73}
+   ]
+  },
+  {"name": "fuels", "size": 1113,
+   "children": [
+    {"name": "Other", "size": 877},
+    {"name": "China", "size": 48},
+    {"name": "USA", "size": 148},
+    {"name": "India", "size": 12},
+    {"name": "Russia", "size": 28}
+   ]
+  }
+ ]
+}

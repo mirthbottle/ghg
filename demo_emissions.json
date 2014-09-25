@@ -1,5 +1,5 @@
 {
- "name": "global ghg production",
+ "name": "global ghg sources",
  "children": [
   {"name": "Other", "size": 16094,
    "children": [
@@ -55,77 +55,54 @@
   {
    "name": "India", "size": 2486,
    "children": [
-    {"name": "converters"},
-    {"name": "DataField", "size": 175},
-    {"name": "DataSchema", "size": 216},
-    {"name": "DataSet", "size": 586},
-    {"name": "DataSource", "size": 333},
-    {"name": "DataTable", "size": 77},
-    {"name": "DataUtil", "size": 332}
+    {"name": "energy", "size": 1913},
+    {"name": "industrial processes", "size": 161},
+    {"name": "agriculture", "size": 352},
+    {"name": "waste", "size": 58},
+    {"name": "fuels", "size": 12}
    ]
   },
   {
    "name": "Russia", "size": 2374,
    "children": [
-    {"name": "AggregateExpression", "size": 161},
-    {"name": "And", "size": 10},
-    {"name": "Arithmetic", "size": 389},
-    {"name": "Average", "size": 89},
-    {"name": "BinaryExpression", "size": 28},
-    {"name": "Comparison", "size": 51},
-    {"name": "CompositeExpression", "size": 36},
-    {"name": "Count", "size": 78},
-    {"name": "DateUtil", "size": 41},
-    {"name": "Distinct", "size": 93},
-    {"name": "Expression", "size": 51}
+    {"name": "energy", "size": 2076},
+    {"name": "industrial processes", "size": 67},
+    {"name": "agriculture", "size": 158},
+    {"name": "waste", "size": 73},
+    {"name": "fuels", "size": 28}
    ]
   },
   {
    "name": "Japan", "size": 1307,
    "children": [
-    {"name": "IScaleMap", "size": 210},
-    {"name": "LinearScale", "size": 131},
-    {"name": "LogScale", "size": 315},
-    {"name": "OrdinalScale", "size": 37}
+    {"name": "energy", "size": 1196},
+    {"name": "industrial processes", "size": 80},
+    {"name": "agriculture", "size": 27},
+    {"name": "waste", "size": 5},
+    {"name": "fuels", "size": 31}
    ]
   },
   {
    "name": "Brazil", "size": 1131,
    "children": [
-    {"name": "Arrays", "size": 82},
-    {"name": "Colors", "size": 10},
-    {"name": "IEvaluable", "size": 33},
-    {"name": "IPredicate", "size": 38},
-    {"name": "IValueProxy", "size": 87},
-    {"name": "Maths", "size": 17}
+    {"name": "energy", "size": 437},
+    {"name": "industrial processes", "size": 50},
+    {"name": "agriculture", "size": 600},
+    {"name": "waste", "size": 44},
+    {"name": "fuels", "size": 20}
    ]
   },
   {
    "name": "Germany", "size": 882,
    "children": [
-    {"name": "IScaleMap", "size": 210},
-    {"name": "LinearScale", "size": 131},
-    {"name": "LogScale", "size": 31},
-    {"name": "OrdinalScale", "size": 37}
+    {"name": "energy", "size": 770},
+    {"name": "industrial processes", "size": 43},
+    {"name": "agriculture", "size": 61},
+    {"name": "waste", "size": 10},
+    {"name": "fuels", "size": 31}
    ]
   },
-  {
-   "name": "Indonesia", "size": 700,
-   "children": [
-    {"name": "IScaleMap", "size": 210},
-    {"name": "LinearScale", "size": 130},
-    {"name": "LogScale", "size": 315},
-    {"name": "OrdinalScale", "size": 37}
-   ]
-  },
-  {
-   "name": "Canada", "size": 650,
-   "children": [
-    {"name": "IScaleMap", "size": 210},
-    {"name": "LinearScale", "size": 131},
-    {"name": "LogScale", "size": 31},
-    {"name": "OrdinalScale", "size": 37}
-   ]
-  }
+  {"name": "Indonesia", "size": 700},
+  {"name": "Canada", "size": 650}
  ]
 }

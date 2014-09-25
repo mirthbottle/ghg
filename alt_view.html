@@ -21,12 +21,10 @@ form {
 </style>
 </head>
 <body>
-<h1>Total GHG Emissions Excluding Land-Use Change and Forestry (MtCO2e)</h1>
+<h1>Alternate View (MtCO2e)</h1>
 <form>
-  <label><input type="radio" name="mode" value="size"> Size</label>
-  <label><input type="radio" name="mode" value="count" checked> Count</label>
+  <label><input type="radio" name="mode" value="size" checked> Size</label>
 </form>
-
 </body>
 <script>
 
@@ -52,7 +50,7 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-d3.json("demo_emissions.json", function(error, root) {
+d3.json("demo_emissions2.json", function(error, root) {
   var path = svg.datum(root).selectAll("path")
       .data(partition.nodes)
     .enter().append("path")
