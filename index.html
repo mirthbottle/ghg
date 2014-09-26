@@ -39,12 +39,12 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height)
   .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height * .52 + ")");
+    .attr("transform", "translate(" + width / 2 + "," + height * .4 + ")");
 
 var partition = d3.layout.partition()
     .sort(null)
     .size([2 * Math.PI, radius * radius])
-    .value(function(d) { return 1; });
+    .value(function(d) { return d.size; });
 
 var arc = d3.svg.arc()
     .startAngle(function(d) { return d.x; })
