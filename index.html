@@ -28,7 +28,7 @@ form {
 
 var width = 800,
     height = 1000,
-    radius = Math.min(width, height) / 2,
+    radius = Math.min(width, height)*.4,
     color = d3.scale.category20c();
 
 var svg = d3.select("body").append("svg")
