@@ -22,15 +22,11 @@ form {
 </head>
 <body>
 <h1>Alternate View (MtCO2e)</h1>
-<form>
-  <label><input type="radio" name="mode" value="size"> Size</label>
-  <label><input type="radio" name="mode" value="size" checked> Count</label>
-</form>
 </body>
 <script>
 
 var width = 960,
-    height = 700,
+    height = 1000,
     radius = Math.min(width, height) / 2,
     color = d3.scale.category20c();
 
@@ -43,7 +39,7 @@ var svg = d3.select("body").append("svg")
 var partition = d3.layout.partition()
     .sort(null)
     .size([2 * Math.PI, radius * radius])
-    .value(function(d) { return 1; });
+    .value(function(d) { return d.size; });
 
 var arc = d3.svg.arc()
     .startAngle(function(d) { return d.x; })
