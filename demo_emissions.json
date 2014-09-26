@@ -3,19 +3,19 @@
  "children": [
   {"name": "Other", "size": 16094,
    "children": [
-    {"name": "energy", "size": 12392,
+    {"name": "energy", "size": 11359,
      "children": [
-      {"name": "electricity", "size": 7266},
-      {"name": "manufacturing", "size": 2487},
-      {"name": "transportation", "size": 623},
-      {"name": "fugitive", "size": 304},
-      {"name": "other fuels", "size": 710}
+      {"name": "electricity", "size": 4431},
+      {"name": "manufacturing", "size": 1892},
+      {"name": "transportation", "size": 2260},
+      {"name": "fugitive", "size": 1226},
+      {"name": "other fuels", "size": 1548}
      ]
     },
-    {"name": "industrial processes", "size": 1255},
-    {"name": "agriculture", "size": 708},
-    {"name": "waste", "size": 196},
-    {"name": "fuels", "size": 48}
+    {"name": "industrial processes", "size": 777},
+    {"name": "agriculture", "size": 3302},
+    {"name": "waste", "size": 826},
+    {"name": "fuels", "size": 775}
    ]
   },
   {"name": "China", "size": 10552,
