@@ -3,15 +3,6 @@
 ## just run ipython notebook from a terminal
 ## it should open in a browser
 
-# To do
-- explore options for splitting up emissions
-- split up electricity/heating to commercial vs residential
-- split up transportation to commercial/business vs household
-- customer discovery A/B testing
-- add labels to d3 pi charts
-- modify d3 so that outter rings can be the higher level instead
-- learn to export json from python
-
 # data
 <http://www.wri.org/our-work/project/cait-climate-data-explorer/maps-data>
 <http://eia.gov/consumption/manufacturing/data/2006/#undefined>
