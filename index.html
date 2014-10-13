@@ -53,6 +53,12 @@ var arc = d3.svg.arc()
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
 d3.json("demo_emissions.json", function(error, root) {
+  var tooltip = d3.select("body")
+      .append("div")
+      .style("position", "absolute")
+      .style("z-index", "10")
+      .style("visibility", "hidden");
+
   var path = svg.datum(root).selectAll("path")
       .data(partition.nodes)
     .enter().append("path")
@@ -61,7 +67,11 @@ d3.json("demo_emissions.json", function(error, root) {
       .style("stroke", "#fff")
       .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
       .style("fill-rule", "evenodd")
-      .each(stash);
+      .each(stash)
+      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.name);})
+      .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX-222)+"px");})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+
 
   d3.selectAll("input").on("change", function change() {
     var value = this.value === "count"
