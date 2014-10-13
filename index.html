@@ -71,7 +71,9 @@ d3.json("demo_emissions.json", function(error, root) {
       .each(stash);
 
   path.append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + (180 / Math.PI * (d.x + d.dx/2) - 90) + ")" ; })
+      .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
+      .style("fill", "#444")
       .text(function(d) { return d.size>300 ? d.name: ""; });
 
 //      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.name).style("top", (770+arc.centroid(d)[1])+"px").style("left", (400 + arc.centroid(d)[0]) +"px");})
