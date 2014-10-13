@@ -61,15 +61,21 @@ d3.json("demo_emissions.json", function(error, root) {
 
   var path = svg.datum(root).selectAll("path")
       .data(partition.nodes)
-    .enter().append("path")
+    .enter();
+  path.append("path")
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
       .style("stroke", "#fff")
       .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
       .style("fill-rule", "evenodd")
-      .each(stash)
-      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.name).style("top", (event.pageY-10)+"px").style("left",(event.pageX-222)+"px");})
-      .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+      .each(stash);
+
+  path.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
+      .text(function(d) { return d.size>300 ? d.name: ""; });
+
+//      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.name).style("top", (770+arc.centroid(d)[1])+"px").style("left", (400 + arc.centroid(d)[0]) +"px");})
+//      .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
 
 
   d3.selectAll("input").on("change", function change() {
