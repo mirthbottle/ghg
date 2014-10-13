@@ -68,8 +68,7 @@ d3.json("demo_emissions.json", function(error, root) {
       .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
       .style("fill-rule", "evenodd")
       .each(stash)
-      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.name);})
-      .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX-222)+"px");})
+      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.name).style("top", (event.pageY-10)+"px").style("left",(event.pageX-222)+"px");})
       .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
 
 
