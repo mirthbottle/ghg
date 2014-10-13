@@ -61,7 +61,7 @@ d3.json("demo_emissions.json", function(error, root) {
 
   var path = svg.datum(root).selectAll("path")
       .data(partition.nodes)
-    .enter();
+      .enter();
   path.append("path")
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
@@ -71,14 +71,11 @@ d3.json("demo_emissions.json", function(error, root) {
       .each(stash);
 
   path.append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + (180 / Math.PI * (d.x + d.dx/2) - 90) + ")" ; })
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+      .attr("text-anchor", "middle")
       .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
       .style("fill", "#444")
       .text(function(d) { return d.size>300 ? d.name: ""; });
-
-//      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.name).style("top", (770+arc.centroid(d)[1])+"px").style("left", (400 + arc.centroid(d)[0]) +"px");})
-//      .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-
 
   d3.selectAll("input").on("change", function change() {
     var value = this.value === "count"
@@ -92,6 +89,17 @@ d3.json("demo_emissions.json", function(error, root) {
         .attrTween("d", arcTween);
   });
 });
+
+// how to rotate text
+function rotateText(d) {
+  // Offset the angle by 90 deg since the '0' degree axis for arc is Y axis, while
+  // for text it is the X axis.
+  var thetaDeg = (180 / Math.PI * (arc.startAngle()(d) + arc.endAngle()(d)) / 2 - 90);
+  // If we are rotating the text by more than 90 deg, then "flip" it.
+  // This is why "text-anchor", "middle" is important, otherwise, this "flip" would
+  // a little harder.
+  return (thetaDeg > 90) ? thetaDeg - 180 : thetaDeg;
+}
 
 // Stash the old values for transition.
 function stash(d) {
