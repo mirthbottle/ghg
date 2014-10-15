@@ -16,11 +16,11 @@ var arc = d3.svg.arc()
 
 
 function draw_chart(file) {
-  var svg = d3.select("body").append("svg")
+  var svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height)
   .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height * .52 + ")");
+    .attr("transform", "translate(" + width / 2 + "," + height * .5 + ")");
 
   d3.select(self.frameElement).style("height", height + "px");
 

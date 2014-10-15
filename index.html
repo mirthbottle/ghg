@@ -1,45 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="utf-8">
-<script src="/javascript/d3.js"></script>
-<script src="/javascript/draw_chart.js"></script>
-<style>
+  <head>
+    <meta charset="utf-8">
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/bootstrap/css/jumbotron-narrow.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/javascript/d3.js"></script>
+    <script src="/javascript/draw_chart.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+	<h1> GHG Emissions Mapping</h1>
+	<h5> There are many ways to combat climate change since GHG emissions is a byproduct of most of our activities.  Does the transportation system or buildings result in more emissions?  Is it different for different states?  Are the end users the private sector, public sector, or residents?  Global GHG emissions can be organized by process, jurisdiction, products and services, industry, type of end user, company, etc.  Students and young professionals may be able to benefit from a visualization tool to help them choose between fields and specializations.</h5><br>
+	<h5>Below is an example of one way to visualize the total global GHG emissions using data.</h5>
+      </div>
+      <h2>Total GHG Emissions Excluding Land-Use Change and Forestry (MtCO2e)</h2>
+      <p>WRI, CAIT 2.0. 2014. Climate Analysis Indicators Tool: WRI's Climate Data Explorer. Washington, DC: World Resources Institute. Available at: <a href="http://cait2.wri.org">http://cait2.wri.org</a></p>
+      <p><button class="btn btn-default btn-lg" onclick="switch_view()">Switch to Alternative View</button></p>
+      <input id="data_file" type="hidden" value="demo_emissions.json"></input>
+    </div>
+    <div id="chart" align="middle">
+    </div>
+  </body>
+  <script>
+    draw_chart("demo_emissions.json");
 
-body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin: auto;
-  position: relative;
-  width: 960px;
-}
-
-form {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-</style>
-</head>
-<body>
-<h1> GHG Emissions Mapping</h1>
-<h5> There are many ways to combat climate change since GHG emissions is a byproduct of most of our activities.  Does the transportation system or buildings result in more emissions?  Is it different for different states?  Is it because of the private sector, public sector, or residents?  Global GHG emissions can be organized by process, jurisdiction, products and services, industry, type of end user, company, etc.  Students and young professionals may be able to benefit from a visualization tool to help them choose between fields and specializations.</h5>
-<h5>Below is an example of one way to visualize the total global GHG emissions using data from WRI (World Resources Institute).</h5>
-<p>WRI, CAIT 2.0. 2014. Climate Analysis Indicators Tool: WRI's Climate Data Explorer. Washington, DC: World Resources Institute. Available at: <a href="http://cait2.wri.org">http://cait2.wri.org</a></p>
-<h1>Total GHG Emissions Excluding Land-Use Change and Forestry (MtCO2e)</h1>
-<p><button onclick="switch_view()">Switch to Alternative View</button></p>
-<input id="data_file" type="hidden" value="demo_emissions.json"></input>
-</body>
-<script>
-draw_chart("demo_emissions.json");
-
-function switch_view() {
-  var current_file = document.getElementById("data_file");
-  var new_file = current_file.value == "demo_emissions.json" ? "demo_emissions2.json" : "demo_emissions.json";
-  d3.select("svg")
+    function switch_view() {
+    var current_file = document.getElementById("data_file");
+    var new_file = current_file.value == "demo_emissions.json" ? "demo_emissions2.json" : "demo_emissions.json";
+    d3.select("svg")
     .remove();
-  draw_chart(new_file);
-  current_file.value = new_file;
-}
-</script>
+    draw_chart(new_file);
+    current_file.value = new_file;
+    }
+  </script>
 </html>
