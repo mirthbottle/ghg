@@ -26,6 +26,7 @@ function draw_chart(order) {
 
   var file = "demo_emissions.json";
   if (order != "country") {
+    file = "demo_emissions2.json";
     arc
       .innerRadius(function(d) { return Math.sqrt(100000 - d.y); })
       .outerRadius(function(d) { return Math.sqrt(100000 - d.y + d.dy); });
