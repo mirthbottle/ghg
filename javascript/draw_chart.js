@@ -25,12 +25,11 @@ function draw_chart(order) {
   d3.select(self.frameElement).style("height", height + "px");
 
   var file = "demo_emissions.json";
-  if (order == "country") {
-    partition.sort(null);
-  }
-  else {
-    partition.sort(function(a, b) { return d3.ascending(a.name, b.name); });
+  if (order != "country") {
     file = "demo_emissions2.json";
+    arc
+      .innerRadius(function(d) { return Math.sqrt(100000 - d.y); })
+      .outerRadius(function(d) { return Math.sqrt(100000 - d.y + d.dy); });
   }
   d3.json(file, function(error, root) {
     var tooltip = d3.select("body")
