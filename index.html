@@ -19,21 +19,21 @@
       <h2>Total GHG Emissions Excluding Land-Use Change and Forestry (MtCO2e)</h2>
       <p>WRI, CAIT 2.0. 2014. Climate Analysis Indicators Tool: WRI's Climate Data Explorer. Washington, DC: World Resources Institute. Available at: <a href="http://cait2.wri.org">http://cait2.wri.org</a></p>
       <p><button class="btn btn-default btn-lg" onclick="switch_view()">Switch to Alternative View</button></p>
-      <input id="data_file" type="hidden" value="demo_emissions.json"></input>
+      <input id="view" type="hidden" value="country"></input>
     </div>
     <div id="chart" align="middle">
     </div>
   </body>
   <script>
-    draw_chart("demo_emissions.json");
+    draw_chart("country");
 
     function switch_view() {
-    var current_file = document.getElementById("data_file");
-    var new_file = current_file.value == "demo_emissions.json" ? "demo_emissions2.json" : "demo_emissions.json";
+    var current_view = document.getElementById("view");
+    var new_view = current_view.value == "country" ? "source" : "country";
     d3.select("svg")
     .remove();
-    draw_chart(new_file);
-    current_file.value = new_file;
+    draw_chart(new_view);
+    current_view.value = new_view;
     }
   </script>
 </html>
