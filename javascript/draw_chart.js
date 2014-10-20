@@ -15,7 +15,7 @@ var arc = d3.svg.arc()
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
 
-function draw_chart(file) {
+function draw_chart(order) {
   var svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -24,13 +24,21 @@ function draw_chart(file) {
 
   d3.select(self.frameElement).style("height", height + "px");
 
+  var file = "demo_emissions.json";
+  if (order == "country") {
+    partition.sort(null);
+  }
+  else {
+    partition.sort(function(a, b) { return d3.ascending(a.name, b.name); });
+    file = "demo_emissions2.json";
+  }
   d3.json(file, function(error, root) {
     var tooltip = d3.select("body")
       .append("div")
       .style("position", "absolute")
       .style("z-index", "10")
       .style("visibility", "hidden");
-
+    
     var path = svg.datum(root).selectAll("path")
       .data(partition.nodes)
       .enter();
@@ -51,9 +59,7 @@ function draw_chart(file) {
       .text(function(d) { return d.size>300 ? d.name: ""; });
     
     d3.selectAll("input").on("change", function change() {
-      var value = this.value === "count"
-        ? function() { return 1; }
-      : function(d) { return d.size; };
+      var value = function(d) { return d.size; };
       
       path.data(partition.value(value).nodes)
 	.transition()
