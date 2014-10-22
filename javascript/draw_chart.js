@@ -41,7 +41,8 @@ function draw_chart(order) {
       .append("div")
       .style("position", "absolute")
       .style("z-index", "10")
-      .style("visibility", "hidden");
+      .style("visibility", "hidden")
+      .style("color", "#666");
     
     var path = svg.datum(root).selectAll("path")
       .data(partition.nodes)
@@ -61,7 +62,10 @@ function draw_chart(order) {
 	}
 	return color(name); })
       .style("fill-rule", "evenodd")
-      .each(stash);
+      .each(stash)
+      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e");})
+      .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX + 20)+"px");})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
     
     path.append("text")
       .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
