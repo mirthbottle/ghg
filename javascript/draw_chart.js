@@ -37,12 +37,11 @@ function draw_chart(order) {
       .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
   }
   d3.json(file, function(error, root) {
-    var tooltip = d3.select("body")
-      .append("div")
+    var tooltip = d3.select("body").append("div")
+      .attr("class", "tooltip")
       .style("position", "absolute")
       .style("z-index", "10")
       .style("visibility", "hidden")
-      .style("color", "#666");
     
     var path = svg.datum(root).selectAll("path")
       .data(partition.nodes)
