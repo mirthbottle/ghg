@@ -51,7 +51,15 @@ function draw_chart(order) {
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
       .style("stroke", "#fff")
-      .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
+      .style("fill", function(d) { 
+	var name = d.parent ? d.parent.name : "";
+	if (name != ""){
+	  name = d.parent.parent ? "" : d.name;
+	  if (name == "") {
+	    name = d.parent.parent.parent ? d.parent.parent.name : d.parent.name;
+	  }
+	}
+	return color(name); })
       .style("fill-rule", "evenodd")
       .each(stash);
     
@@ -60,7 +68,7 @@ function draw_chart(order) {
       .attr("text-anchor", "middle")
       .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
       .style("fill", "#444")
-      .text(function(d) { return d.size>300 ? d.name: ""; });
+      .text(function(d) { return d.size>300 ? d.name : ""; });
     
     d3.selectAll("input").on("change", function change() {
       var value = function(d) { return d.size; };
