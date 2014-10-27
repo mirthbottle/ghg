@@ -61,20 +61,13 @@ function collect_children() {
       .text(function(d) { return d.size>300 ? d.name: ""; });
     
     d3.selectAll("button").on("click", function change() {
-      var value = function(d) { return d.size + 800; };
       d3.selectAll("text").remove();
+      var newdata = modPartition(path.data());
 
-      path.data(partition.value(value).nodes)
+      path.data(newdata)
 	.transition()
 	.duration(1500)
 	.attrTween("d", arcTween);
-
-      var text = g.append("text")
-	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-	.attr("text-anchor", "middle")
-	.style("font-size", function(d) { return (12/d.depth+6)+"px"; })
-	.style("fill", "#444")
-	.text(function(d) { return d.size>300 ? d.name: ""; });
     });
     
   });
@@ -109,6 +102,9 @@ function arcTween(a) {
 }
 
 function modPartition(p) {
-  
+  p.forEach(function(d){
+    d.x = d.x + 1;
+  });
+  return p;
 }
 
