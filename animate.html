@@ -2,13 +2,13 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link href="/ghg/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/ghg/bootstrap/css/jumbotron-narrow.css" rel="stylesheet">
-    <link href="/ghg/css/tooltip.css" rel="stylesheet">
+    <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/tooltip.css" rel="stylesheet">
+    <link href="/bootstrap/css/jumbotron-narrow.css" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="/ghg/bootstrap/js/bootstrap.min.js"></script>
-    <script src="/ghg/javascript/d3.js"></script>
-    <script src="/ghg/javascript/draw_chart.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/javascript/d3.js"></script>
+    <script src="/javascript/collect_children.js"></script>
   </head>
   <body>
     <div class="container">
@@ -19,26 +19,18 @@
       </div>
       <h2>Total GHG Emissions Excluding Land-Use Change and Forestry (MtCO2e)</h2>
       <p>WRI, CAIT 2.0. 2014. Climate Analysis Indicators Tool: WRI's Climate Data Explorer. Washington, DC: World Resources Institute. Available at: <a href="http://cait2.wri.org">http://cait2.wri.org</a></p>
-      <p><button class="btn btn-default btn-lg" onclick="switch_view()">Switch to Alternative View</button>
-	<button class="btn btn-default btn-lg" onclick="">Merge Children</button>
+      <p><button class="btn btn-default btn-lg">Switch to Alternative View</button>
       </p>
+      <form>
+	<label><input type="radio" name="mode" value="size"> Size</label>
+	<label><input type="radio" name="mode" value="count" checked> Count</label>
+      </form>
       <input id="view" type="hidden" value="country"></input>
     </div>
     <div id="chart" align="middle">
     </div>
   </body>
   <script>
-
-    draw_chart("country");
-   
-
-    function switch_view() {
-    var current_view = document.getElementById("view");
-    var new_view = current_view.value == "country" ? "source" : "country";
-    d3.select("svg")
-    .remove();
-    draw_chart(new_view);
-    current_view.value = new_view;
-    }
+    collect_children();
   </script>
 </html>
