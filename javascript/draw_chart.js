@@ -14,15 +14,15 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-
+var ghgs;
+var path;
+var svg;
 function draw_chart(order) {
-  var svg = d3.select("#chart").append("svg")
+  svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height * .5 + ")");
-
-  d3.select(self.frameElement).style("height", height + "px");
 
   var file = "demo_emissions.json";
   if (order != "country") {
@@ -36,19 +36,24 @@ function draw_chart(order) {
       .innerRadius(function(d) { return Math.sqrt(d.y); })
       .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
   }
-  d3.json(file, function(error, root) {
+
+  d3.select(self.frameElement).style("height", height + "px");
+
+  d3.json(file, function(error, root) { 
+    if (error) return console.warn(error);
+    ghgs = root;
     var tooltip = d3.select("body").append("div")
       .attr("class", "tooltip")
       .style("position", "absolute")
       .style("z-index", "10")
       .style("visibility", "hidden")
     
-    var path = svg.datum(root).selectAll("path")
-      .data(partition.nodes)
-      .enter();
+    path = svg.datum(ghgs).selectAll("path")
+      .data(partition.nodes);
     
-    path.append("path")
-      .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
+    path.enter().append("path")
+      .attr("display", function(d) { 
+	return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
       .style("stroke", "#fff")
       .style("fill", function(d) { 
@@ -61,26 +66,18 @@ function draw_chart(order) {
 	}
 	return color(name); })
       .style("fill-rule", "evenodd")
-      .each(stash)
       .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e");})
       .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX + 20)+"px");})
-      .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-    
-    path.append("text")
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
+      .each(stash);
+
+    path.enter().append("text")
       .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
       .attr("text-anchor", "middle")
       .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
       .style("fill", "#444")
-      .text(function(d) { return d.size>300 ? d.name : ""; });
-    
-    d3.selectAll("input").on("change", function change() {
-      var value = function(d) { return d.size; };
-      
-      path.data(partition.value(value).nodes)
-	.transition()
-        .duration(1500)
-        .attrTween("d", arcTween);
-    });
+      .style("z-index", "2")
+      .text(function(d) { return d.size>300 ? d.name: ""; });
   });
 }
 

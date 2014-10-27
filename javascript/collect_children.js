@@ -25,11 +25,7 @@ function collect_children() {
   d3.select(self.frameElement).style("height", height + "px");
 
   var file = "demo_emissions.json";
-  else {
-    arc
-      .innerRadius(function(d) { return Math.sqrt(d.y); })
-      .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
-  }
+
   d3.json(file, function(error, root) {
     var tooltip = d3.select("body")
       .append("div")
@@ -37,33 +33,50 @@ function collect_children() {
       .style("z-index", "10")
       .style("visibility", "hidden");
     
-    var path = svg.datum(root).selectAll("path")
+    var g = svg.datum(root).selectAll("path")
       .data(partition.nodes)
-      .enter();
+      .enter().append("g");
     
-    path.append("path")
+    var path = g.append("path")
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
       .style("stroke", "#fff")
-      .style("fill", function(d) { return color(d.name); })
+      .style("fill", function(d) {
+	var name = d.parent ? d.parent.name : "";
+	if (name != ""){
+	  name = d.parent.parent ? "" : d.name;
+	  if (name == "") {
+	    name = d.parent.parent.parent ? d.parent.parent.name : d.parent.name;
+	  }
+	}
+	return color(name); })
       .style("fill-rule", "evenodd")
       .each(stash);
-    
-    path.append("text")
+
+    var text = g.append("text")
       .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
       .attr("text-anchor", "middle")
       .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
       .style("fill", "#444")
       .text(function(d) { return d.size>300 ? d.name: ""; });
     
-    d3.selectAll("input").on("change", function change() {
-      var value = function(d) { return d.size; };
-      
+    d3.selectAll("button").on("click", function change() {
+      var value = function(d) { return d.size + 800; };
+      d3.selectAll("text").remove();
+
       path.data(partition.value(value).nodes)
 	.transition()
-        .duration(1500)
-        .attrTween("d", arcTween);
+	.duration(1500)
+	.attrTween("d", arcTween);
+
+      var text = g.append("text")
+	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+	.attr("text-anchor", "middle")
+	.style("font-size", function(d) { return (12/d.depth+6)+"px"; })
+	.style("fill", "#444")
+	.text(function(d) { return d.size>300 ? d.name: ""; });
     });
+    
   });
 }
 
@@ -94,3 +107,8 @@ function arcTween(a) {
     return arc(b);
   };
 }
+
+function modPartition(p) {
+  
+}
+
