@@ -14,7 +14,7 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-
+var newdata;
 function collect_children() {
   var svg = d3.select("#chart").append("svg")
     .attr("width", width)
@@ -62,12 +62,33 @@ function collect_children() {
     
     d3.selectAll("button").on("click", function change() {
       d3.selectAll("text").remove();
-      var newdata = modPartition(path.data());
+      newdata = modPartition(path.data());
 
       path.data(newdata)
 	.transition()
 	.duration(1500)
 	.attrTween("d", arcTween);
+
+      path.data(newdata).enter().append("path")
+	.attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
+	.attr("d", arc)
+	.style("stroke", "#fff")
+        .style("fill", function(d) {
+	  var name = d.parent ? d.parent.name : "";
+	  if (name != ""){
+	    name = d.parent.parent ? "" : d.name;
+	    if (name == "") {
+	      name = d.parent.parent.parent ? d.parent.parent.name : d.parent.name;
+	    }
+	  }
+	  return color(name); });
+      
+      var text = g.append("text")
+	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+	.attr("text-anchor", "middle")
+	.style("font-size", function(d) { return (12/d.depth+6)+"px"; })
+	.style("fill", "#444")
+	.text(function(d) { return d.size>300 ? d.name: ""; });
     });
     
   });
@@ -100,11 +121,67 @@ function arcTween(a) {
     return arc(b);
   };
 }
-
+var new_parents = [];
 function modPartition(p) {
+  var names = [];
+  var maxxs = [];
+  var offsets = [];
   p.forEach(function(d){
-    d.x = d.x + 1;
+    if (d.depth == 2){
+      var i = names.indexOf(d.name);
+      if (i == -1) {
+	names.push(d.name);
+	maxxs.push(d.dx);  // the end of the first one
+	d.x = 0;
+      }
+      else {
+	d.x = maxxs[i];  // where the next one should be set to
+	maxxs[i] += d.dx; // increment maxx
+      }
+    }
   });
+
+  var c = 0;    
+  for(var j=0; j<maxxs.length; j++){
+    offsets[j] = c;
+    c += maxxs[j];
+  }
+
+  p.forEach(function(d){
+    if (d.depth == 2){
+      var i = names.indexOf(d.name);
+      d.x += offsets[i];
+      if (i == 0) {
+	// change the parent to be the same as the child
+	d.parent.x = d.x;
+	d.parent.dx = d.dx;
+	d.parent.size = d.size;
+      }
+      else {
+	// make new parent nodes
+	var parent = jQuery.extend({}, d.parent);
+	parent.x = d.x;
+	parent.dx = d.dx;
+	parent.size = d.size;
+	parent.children = [d];
+	new_parents.push(parent);
+      }
+    }
+    else if (d.depth == 3){
+      // child of energy category
+      var change = d.parent.x0 - d.parent.x;
+      d.x = d.x - change;
+    }
+  });
+  p = p.concat(new_parents);
   return p;
 }
 
+function clone(obj) {
+  var copy;
+  // Handle Object
+  if (obj instanceof Object) {
+    copy = {};
+    
+  }
+}
