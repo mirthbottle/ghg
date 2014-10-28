@@ -61,7 +61,7 @@ function collect_children() {
       .text(function(d) { return d.size>300 ? d.name: ""; });
     
     d3.selectAll("button").on("click", function change() {
-      d3.selectAll("text").remove();
+      //d3.selectAll("text").remove();
       newdata = modPartition(path.data());
 
       path.data(newdata)
@@ -82,13 +82,16 @@ function collect_children() {
 	    }
 	  }
 	  return color(name); });
-      
-      var text = g.append("text")
-	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-	.attr("text-anchor", "middle")
-	.style("font-size", function(d) { return (12/d.depth+6)+"px"; })
-	.style("fill", "#444")
-	.text(function(d) { return d.size>300 ? d.name: ""; });
+    text
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+      .text(function(d) { return d.size>300 ? d.name: ""; });
+    text.data(newdata).enter().append("text")
+       .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+      .attr("text-anchor", "middle")
+      .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
+      .style("fill", "#444")
+      .text(function(d) { return d.size>300 ? d.name: ""; });
+
     });
     
   });
