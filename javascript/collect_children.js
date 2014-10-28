@@ -13,8 +13,8 @@ var arc = d3.svg.arc()
     .endAngle(function(d) { return d.x + d.dx; })
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
-
-
+var olddata;
+var newdata;
 function collect_children() {
   var svg = d3.select("#chart").append("svg")
     .attr("width", width)
@@ -62,12 +62,20 @@ function collect_children() {
     
     d3.selectAll("button").on("click", function change() {
       d3.selectAll("text").remove();
-      var newdata = modPartition(path.data());
+      olddata = path.data();
+      newdata = modPartition(path.data());
 
       path.data(newdata)
 	.transition()
 	.duration(1500)
 	.attrTween("d", arcTween);
+
+      var text = g.append("text")
+      .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+      .attr("text-anchor", "middle")
+      .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
+      .style("fill", "#444")
+      .text(function(d) { return d.size>300 ? d.name: ""; });
     });
     
   });
@@ -102,8 +110,36 @@ function arcTween(a) {
 }
 
 function modPartition(p) {
+  var names = [];
+  var maxxs = [];
+  var offsets = [];
   p.forEach(function(d){
-    d.x = d.x + 1;
+    if (d.depth == 2){
+      var i = names.indexOf(d.name);
+      if (i == -1) {
+	names.push(d.name);
+	maxxs.push(d.dx);  // the end of the first one
+	d.x = 0;
+      }
+      else {
+	d.x = maxxs[i];  // where the next one should be set to
+	maxxs[i] += d.dx; // increment maxx
+      }
+    }
+  });
+
+  var c = 0;    
+  for(var j=0; j<maxxs.length; j++){
+    c += maxxs[j];
+    offsets[j] = c;
+  }
+  p.forEach(function(d){
+    if (d.depth == 2){
+      var i = names.indexOf(d.name);
+      if (i > 0){
+	d.x += offsets[i-1];
+      }
+    }
   });
   return p;
 }
