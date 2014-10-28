@@ -84,11 +84,11 @@ function collect_children() {
 	  return color(name); });
       
       var text = g.append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-      .attr("text-anchor", "middle")
-      .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
-      .style("fill", "#444")
-      .text(function(d) { return d.size>300 ? d.name: ""; });
+	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+	.attr("text-anchor", "middle")
+	.style("font-size", function(d) { return (12/d.depth+6)+"px"; })
+	.style("fill", "#444")
+	.text(function(d) { return d.size>300 ? d.name: ""; });
     });
     
   });
