@@ -67,20 +67,17 @@ function collect_children() {
       path.data(newdata)
 	.transition()
 	.duration(1500)
-	.attrTween("d", arcTween);
+	.attrTween("d", arcTween)
+	.style("fill", function(d) {
+	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	  return color(name); });
 
       path.data(newdata).enter().append("path")
 	.attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
 	.attr("d", arc)
 	.style("stroke", "#fff")
         .style("fill", function(d) {
-	  var name = d.parent ? d.parent.name : "";
-	  if (name != ""){
-	    name = d.parent.parent ? "" : d.name;
-	    if (name == "") {
-	      name = d.parent.parent.parent ? d.parent.parent.name : d.parent.name;
-	    }
-	  }
+	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
 	  return color(name); });
     text
       .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
