@@ -25,17 +25,6 @@ function draw_chart(order) {
     .attr("transform", "translate(" + width / 2 + "," + height * .5 + ")");
 
   var file = "demo_emissions.json";
-  if (order != "country") {
-    file = "demo_emissions2.json";
-    arc
-      .innerRadius(function(d) { return Math.sqrt(100000 - d.y); })
-      .outerRadius(function(d) { return Math.sqrt(100000 - d.y + d.dy); });
-  }
-  else {
-    arc
-      .innerRadius(function(d) { return Math.sqrt(d.y); })
-      .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
-  }
 
   d3.select(self.frameElement).style("height", height + "px");
 
@@ -46,12 +35,12 @@ function draw_chart(order) {
       .attr("class", "tooltip")
       .style("position", "absolute")
       .style("z-index", "10")
-      .style("visibility", "hidden")
+      .style("visibility", "hidden");
     
-    path = svg.datum(ghgs).selectAll("path")
+    var p = svg.datum(ghgs).selectAll("path")
       .data(partition.nodes);
     
-    path.enter().append("path")
+    p.enter().append("path")
       .attr("display", function(d) { 
 	return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
@@ -71,15 +60,21 @@ function draw_chart(order) {
       .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
       .each(stash);
 
-    path.enter().append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-      .attr("text-anchor", "middle")
-      .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
-      .style("fill", "#444")
-      .style("z-index", "2")
-      .text(function(d) { return d.size>300 ? d.name: ""; });
+    p = addLabels(p);
   });
 }
+
+function addLabels(p){
+  p.enter().append("text")
+    .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+    .attr("text-anchor", "middle")
+    .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
+    .style("fill", "#444")
+      .style("z-index", "2")
+    .text(function(d) { return d.size>300 ? d.name: ""; });
+  return p;
+}
+
 
 // how to rotate text
 function rotateText(d) {

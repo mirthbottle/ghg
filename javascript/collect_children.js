@@ -1,25 +1,26 @@
 var width = 800,
-    height = 800,
-    radius = Math.min(width, height)*.4,
-    color = d3.scale.category20c();
+height = 800,
+radius = Math.min(width, height)*.4,
+color = d3.scale.category20c();
 
 var partition = d3.layout.partition()
-    .sort(null)
-    .size([2 * Math.PI, radius * radius])
-    .value(function(d) { return d.size; });
+  .sort(null)
+  .size([2 * Math.PI, radius * radius])
+  .value(function(d) { return d.size; });
 
 var arc = d3.svg.arc()
-    .startAngle(function(d) { return d.x; })
-    .endAngle(function(d) { return d.x + d.dx; })
-    .innerRadius(function(d) { return Math.sqrt(d.y); })
-    .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
+  .startAngle(function(d) { return d.x; })
+  .endAngle(function(d) { return d.x + d.dx; })
+  .innerRadius(function(d) { return Math.sqrt(d.y); })
+  .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
 var newdata;
+var ghgs;
 function collect_children() {
   var svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height)
-  .append("g")
+    .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height * .5 + ")");
 
   d3.select(self.frameElement).style("height", height + "px");
@@ -27,17 +28,17 @@ function collect_children() {
   var file = "demo_emissions.json";
 
   d3.json(file, function(error, root) {
-    var tooltip = d3.select("body")
-      .append("div")
+    ghgs = root;
+    var tooltip = d3.select("body").append("div")
+      .attr("class", "tooltip")
       .style("position", "absolute")
       .style("z-index", "10")
       .style("visibility", "hidden");
     
     var g = svg.datum(root).selectAll("path")
-      .data(partition.nodes)
-      .enter().append("g");
+      .data(partition.nodes);
     
-    var path = g.append("path")
+    var path = g.enter().append("path")
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
       .style("stroke", "#fff")
@@ -51,9 +52,12 @@ function collect_children() {
 	}
 	return color(name); })
       .style("fill-rule", "evenodd")
+      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e");})
+      .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX + 20)+"px");})
+      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
       .each(stash);
 
-    var text = g.append("text")
+    var text = g.enter().append("text")
       .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
       .attr("text-anchor", "middle")
       .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
@@ -61,7 +65,6 @@ function collect_children() {
       .text(function(d) { return d.size>300 ? d.name: ""; });
     
     d3.selectAll("button").on("click", function change() {
-      //d3.selectAll("text").remove();
       newdata = modPartition(path.data());
 
       path.data(newdata)
@@ -78,16 +81,20 @@ function collect_children() {
 	.style("stroke", "#fff")
         .style("fill", function(d) {
 	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	  return color(name); });
-    text
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-      .text(function(d) { return d.size>300 ? d.name: ""; });
-    text.data(newdata).enter().append("text")
-       .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-      .attr("text-anchor", "middle")
-      .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
-      .style("fill", "#444")
-      .text(function(d) { return d.size>300 ? d.name: ""; });
+	  return color(name); })
+	.on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e");})
+	.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX + 20)+"px");})
+	.on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+
+      text
+	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+	.text(function(d) { return d.size>300 ? d.name: ""; });
+      text.data(newdata).enter().append("text")
+	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+	.attr("text-anchor", "middle")
+	.style("font-size", function(d) { return (12/d.depth+6)+"px"; })
+	.style("fill", "#444")
+	.text(function(d) { return d.size>300 ? d.name: ""; });
 
     });
     
