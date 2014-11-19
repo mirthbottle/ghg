@@ -17,7 +17,7 @@ var arc = d3.svg.arc()
 var by_process;
 var ghgs;
 var by_country;
-var country_displayed = true;
+var animated = false;
 var newdata;
 function collect_children(view) {
   var svg = d3.select("#chart").append("svg")
@@ -62,7 +62,7 @@ function collect_children(view) {
 	}
 	return color(name); })
       .style("fill-rule", "evenodd")
-      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e");})
+      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e " + d.name);})
       .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX + 20)+"px");})
       .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
       .each(stash);
@@ -75,36 +75,38 @@ function collect_children(view) {
       .text(function(d) { return d.size>minsize ? d.name: ""; });
         
     d3.selectAll("button").on("click", function change() {
-      newdata = modPartition(path.data());
-      path.data(newdata)
-	.transition()
-	.duration(5000)
-	.attrTween("d", arcTween)
-	.style("fill", function(d) {
+      if (animated == false) {
+	animated = true;
+	newdata = modPartition(path.data());
+	path.data(newdata)
+	  .transition()
+	  .duration(5000)
+	  .attrTween("d", arcTween)
+	  .style("fill", function(d) {
 	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	  return color(name); });
-
-      path.data(newdata).enter().append("path")
-	.attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
-	.attr("d", arc)
-	.style("stroke", "#fff")
-        .style("fill", function(d) {
-	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	  return color(name); })
-	.on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e");})
-	.on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX + 20)+"px");})
-	.on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-
-      text
-	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-	.text(function(d) { return d.size>minsize ? d.name: ""; });
-      text.data(newdata).enter().append("text")
-	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-	.attr("text-anchor", "middle")
-	.style("font-size", function(d) { return (12/d.depth+6)+"px"; })
-	.style("fill", "#444")
-	.text(function(d) { return d.size>minsize ? d.name: ""; });
-
+	    return color(name); });
+	
+	path.data(newdata).enter().append("path")
+	  .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
+	  .attr("d", arc)
+	  .style("stroke", "#fff")
+          .style("fill", function(d) {
+	    var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	    return color(name); })
+	  .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e " + d.name);})
+	  .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX + 20)+"px");})
+	  .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+	
+	text
+	  .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+	  .text(function(d) { return d.size>minsize ? d.name: ""; });
+	text.data(newdata).enter().append("text")
+	  .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+	  .attr("text-anchor", "middle")
+	  .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
+	  .style("fill", "#444")
+	  .text(function(d) { return d.size>minsize ? d.name: ""; });
+      }
     });
     
   });
