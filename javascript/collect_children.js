@@ -14,9 +14,12 @@ var arc = d3.svg.arc()
   .innerRadius(function(d) { return Math.sqrt(d.y); })
   .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-var newdata;
+var by_process;
 var ghgs;
-function collect_children() {
+var by_country;
+var country_displayed = true;
+var newdata;
+function collect_children(view) {
   var svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -25,7 +28,14 @@ function collect_children() {
 
   d3.select(self.frameElement).style("height", height + "px");
 
-  var file = "demo_emissions.json";
+  if (view == "country"){
+    var file = "demo_emissions.json";
+    var minsize = 300;
+  }
+  else{
+    var file = "demo_enduse.json";
+    var minsize = 70;
+  }
 
   d3.json(file, function(error, root) {
     ghgs = root;
@@ -62,14 +72,13 @@ function collect_children() {
       .attr("text-anchor", "middle")
       .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
       .style("fill", "#444")
-      .text(function(d) { return d.size>300 ? d.name: ""; });
-    
+      .text(function(d) { return d.size>minsize ? d.name: ""; });
+        
     d3.selectAll("button").on("click", function change() {
       newdata = modPartition(path.data());
-
       path.data(newdata)
 	.transition()
-	.duration(1500)
+	.duration(5000)
 	.attrTween("d", arcTween)
 	.style("fill", function(d) {
 	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
@@ -88,13 +97,13 @@ function collect_children() {
 
       text
 	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-	.text(function(d) { return d.size>300 ? d.name: ""; });
+	.text(function(d) { return d.size>minsize ? d.name: ""; });
       text.data(newdata).enter().append("text")
 	.attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
 	.attr("text-anchor", "middle")
 	.style("font-size", function(d) { return (12/d.depth+6)+"px"; })
 	.style("fill", "#444")
-	.text(function(d) { return d.size>300 ? d.name: ""; });
+	.text(function(d) { return d.size>minsize ? d.name: ""; });
 
     });
     
@@ -139,9 +148,13 @@ function modPartition(p) {
       if (i == -1) {
 	names.push(d.name);
 	maxxs.push(d.dx);  // the end of the first one
+	d.x0 = d.x;
+	d.dx0 = d.dx;
 	d.x = 0;
       }
       else {
+	d.x0 = d.x;
+	d.dx0 = d.dx;
 	d.x = maxxs[i];  // where the next one should be set to
 	maxxs[i] += d.dx; // increment maxx
       }
@@ -160,6 +173,8 @@ function modPartition(p) {
       d.x += offsets[i];
       if (i == 0) {
 	// change the parent to be the same as the child
+	d.parent.x0 = d.parent.x;
+	d.parent.dx0 = d.parent.dx;
 	d.parent.x = d.x;
 	d.parent.dx = d.dx;
 	d.parent.size = d.size;
@@ -167,6 +182,8 @@ function modPartition(p) {
       else {
 	// make new parent nodes
 	var parent = jQuery.extend({}, d.parent);
+	parent.x0 = 0;
+	parent.dx0 = 0;
 	parent.x = d.x;
 	parent.dx = d.dx;
 	parent.size = d.size;
@@ -177,6 +194,8 @@ function modPartition(p) {
     else if (d.depth == 3){
       // child of energy category
       var change = d.parent.x0 - d.parent.x;
+      d.x0 = d.x;
+      d.dx0 = d.dx;
       d.x = d.x - change;
     }
   });
@@ -184,11 +203,14 @@ function modPartition(p) {
   return p;
 }
 
-function clone(obj) {
-  var copy;
-  // Handle Object
-  if (obj instanceof Object) {
-    copy = {};
-    
-  }
+function revertPartition(p){
+  p.forEach(function(d){
+    var tempx = d.x;
+    var tempdx = d.dx;
+    d.x = d.x0;
+    d.dx = d.dx0;
+    d.x0 = tempx;
+    d.dx0 = tempdx;
+  });
+  return p; 
 }
