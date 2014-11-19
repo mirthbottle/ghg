@@ -6,13 +6,15 @@
     {"name": "fossil fuel CO2", "size": 2158.5},
     {"name": "stationary combustion", "size": 18.4},
     {"name": "waste", "size": 12.4},
-    {"name": "elec. distribution", "size": 7.0}
+    {"name": "elec. distribution", "size": 7.0},
+    {"name": "other", "size": 4.6}
    ]
   },
   {"name": "Transportation", "size": 1829.4,
    "children": [
     {"name": "fossil fuel CO2", "size": 1745.0},
-    {"name": "deplete ozone", "size": 57.1}
+    {"name": "deplete ozone", "size": 57.1},
+    {"name": "other", "size": 27.3}
    ]
   },
   {"name": "Industry", "size": 1332,
@@ -21,7 +23,8 @@
     {"name": "natural gas", "size": 177.1},
     {"name": "non-energy use fuels", "size": 113.4},
     {"name": "iron & steel", "size": 64.8},
-    {"name": "coal mining", "size": 63.2}
+    {"name": "coal mining", "size": 63.2},
+    {"name": "other", "size": 189.7}
    ]
   },
   {
@@ -31,7 +34,8 @@
     {"name": "enteric fermentation", "size": 137.4},
     {"name": "manure", "size": 70},
     {"name": "fossil fuel CO2", "size": 49.4},
-    {"name": "forest fires CH4 and NO2", "size": 25.7}
+    {"name": "forest fires CH4 and NO2", "size": 25.7},
+    {"name": "other", "size": 16.9}
    ]
   },
   {
@@ -40,14 +44,16 @@
     {"name": "fossil fuel CO2", "size": 222.1},
     {"name": "landfills", "size": 103.0},
     {"name": "deplete ozone", "size": 27},
-    {"name": "wastewater", "size": 16.2}
+    {"name": "wastewater", "size": 16.2},
+    {"name": "other", "size": 9.7}
    ]
   },
   {
    "name": "Residential", "size": 357.3,
    "children": [
     {"name": "fossil fuel CO2", "size": 328.8},
-    {"name": "deplete ozone", "size": 22.6}
+    {"name": "deplete ozone", "size": 22.6},
+    {"name": "other", "size": 5.9}
    ]
   }
  ]

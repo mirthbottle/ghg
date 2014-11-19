@@ -19,24 +19,28 @@
       </div>
       <h2>Total GHG Emissions Excluding Land-Use Change and Forestry (MtCO2e)</h2>
       <p>WRI, CAIT 2.0. 2014. Climate Analysis Indicators Tool: WRI's Climate Data Explorer. Washington, DC: World Resources Institute. Available at: <a href="http://cait2.wri.org">http://cait2.wri.org</a></p>
-      <p><button class="btn btn-default btn-lg">Switch to Alternative View</button>
-	<button class="btn btn-default btn-lg" onclick="">US 2011 End Use</button>
+      <p><button class="btn btn-default btn-lg" id="animate">Rearrange</button><br>
+	<button class="btn btn-default btn-lg" onclick="change_display('enduse')">Display US 2011 End Use Data</button>
+	<button class="btn btn-default btn-lg" onclick="change_display('source')">Display Global 2011 Source Data</button>
       </p>
-      <input id="view" type="hidden" value="country"></input>
+      <input id="view" type="hidden" value="enduse"></input>
+      <input id="animated" type="hidden" value="false"></input>
     </div>
     <div id="chart" align="middle">
     </div>
   </body>
   <script>
-    collect_children("country");
+    collect_children("source");
 
-    function switch_view() {
-    var current_view = document.getElementById("view");
-    var new_view = current_view.value == "country" ? "enduse" : "country";
-    d3.select("svg")
-    .remove();
-    collect_children(new_view);
-    current_view.value = new_view;
+    function change_display(view) {
+      var current_view = document.getElementById("view");
+      var animated = document.getElementById("animated");
+      if (current_view != view){
+        d3.select("svg").remove();
+        collect_children(view);
+        current_view.value = view;
+        animated.value = false;
+      }
     }
   </script>
 </html>
