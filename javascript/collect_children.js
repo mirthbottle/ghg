@@ -14,12 +14,10 @@ var arc = d3.svg.arc()
   .innerRadius(function(d) { return Math.sqrt(d.y); })
   .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-var by_process;
 var ghgs;
-var by_country;
-var animated = false;
 var newdata;
 function collect_children(view) {
+  var animated = false;
   var svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -28,7 +26,7 @@ function collect_children(view) {
 
   d3.select(self.frameElement).style("height", height + "px");
 
-  if (view == "country"){
+  if (view == "source"){
     var file = "demo_emissions.json";
     var minsize = 300;
   }
@@ -47,7 +45,7 @@ function collect_children(view) {
     
     var g = svg.datum(root).selectAll("path")
       .data(partition.nodes);
-    
+
     var path = g.enter().append("path")
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
@@ -74,7 +72,7 @@ function collect_children(view) {
       .style("fill", "#444")
       .text(function(d) { return d.size>minsize ? d.name: ""; });
         
-    d3.selectAll("button").on("click", function change() {
+    d3.select("#animate").on("click", function change() {
       if (animated == false) {
 	animated = true;
 	newdata = modPartition(path.data());
@@ -85,7 +83,7 @@ function collect_children(view) {
 	  .style("fill", function(d) {
 	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
 	    return color(name); });
-	
+
 	path.data(newdata).enter().append("path")
 	  .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
 	  .attr("d", arc)
@@ -139,8 +137,9 @@ function arcTween(a) {
     return arc(b);
   };
 }
-var new_parents = [];
+
 function modPartition(p) {
+  var new_parents = [];
   var names = [];
   var maxxs = [];
   var offsets = [];
