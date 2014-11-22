@@ -66,7 +66,7 @@ function collect_children(view) {
       .each(stash);
 
     var text = g.enter().append("text")
-      .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+      .attr("transform", function(d) { return "translate(" + textCentroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
       .attr("text-anchor", "middle")
       .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
       .style("fill", "#444")
@@ -76,32 +76,26 @@ function collect_children(view) {
       if (animated == false) {
 	animated = true;
 	newdata = modPartition(path.data());
-	path.data(newdata)
+	  
+	path.data(newdata).enter().append("path").attr("opacity", 0)
+	  .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e " + d.name);})
+	  .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX + 20)+"px");})
+	  .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
 	  .transition()
 	  .duration(5000)
 	  .attrTween("d", arcTween)
+	  .style("stroke", "#fff")
 	  .style("fill", function(d) {
 	    var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	    return color(name); });
-	
-	path.data(newdata).enter().append("path")
-	  .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
-	  .attr("d", arc)
-	  .style("stroke", "#fff")
-          .style("fill", function(d) {
-	    var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
 	    return color(name); })
-	  .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e " + d.name);})
-	  .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX + 20)+"px");})
-	  .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-	
-	text
+	  .attr("opacity", 1);
+
+	path
 	  .transition()
 	  .duration(5000)
-	  .attrTween("transform",textTween)
-	  .text(function(d) { return d.size>minsize ? d.name: ""; });
+	  .attrTween("d", arcTween);
 	
-	text.data(newdata).enter().append("text").attr("opacity", 0)
+	text.data(newdata).enter().append("text").attr("opacity", 0.1)
 	  .transition()
 	  .duration(5000)
 	  .attr("opacity", 1)
@@ -110,6 +104,11 @@ function collect_children(view) {
 	  .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
 	  .style("fill", "#444")
 	  .text(function(d) { return d.size>minsize ? d.name: ""; });
+
+	text
+	  .transition()
+	  .duration(5000)
+	  .attrTween("transform",textTween);
       }
     });
   });
@@ -143,6 +142,13 @@ function arcTween(a) {
   };
 }
 
+function textCentroid(d){
+  var label_d = jQuery.extend({}, d);
+  if (d.depth == 2){
+    label_d.x = d.x + d.dx/10;
+  }
+  return arc.centroid(label_d);
+}
 // Interpolate the text so it matches the arcs
 // attribute to edit is transform
 // compute intermediate arc.centroid(d) and rotateText(d)
@@ -153,20 +159,10 @@ function textTween(a){
     var b = j(t);
     a.x0 = b.x;
     a.dx0 = b.dx;
-    return "translate(" + arc.centroid(b)  + ")" + "rotate(" + rotateText(b) + ")" ;
+    return "translate(" + textCentroid(b)  + ")" + "rotate(" + rotateText(b) + ")" ;
   }
 }
 
-function newtextTween(a){
-  var j = d3.interpolate({x: 5, dx: 0}, a);
-  // .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-  return function(t) {
-    var b = j(t);
-    a.x0 = b.x;
-    a.dx0 = b.dx;
-    return "translate(" + arc.centroid(b)  + ")" + "rotate(" + rotateText(b) + ")" ;
-  }
-}
 
 function modPartition(p) {
   var new_parents = [];
@@ -213,8 +209,8 @@ function modPartition(p) {
       else {
 	// make new parent nodes
 	var parent = jQuery.extend({}, d.parent);
-	parent.x0 = d.parent.x0;
-	parent.dx0 = d.parent.dx0;
+	parent.x0 = d.parent.x + d.parent.dx;
+	parent.dx0 = 0;
 	parent.x = d.x;
 	parent.dx = d.dx;
 	parent.size = d.size;
