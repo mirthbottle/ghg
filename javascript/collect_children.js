@@ -72,7 +72,7 @@ function collect_children(view) {
       .style("fill", "#444")
       .text(function(d) { return d.size>minsize ? d.name: ""; });
         
-    d3.select("#animate").on("click", function change() {
+    d3.selectAll("#animate1, #animate2").on("click", function change() {
       if (animated == false) {
 	animated = true;
 	newdata = modPartition(path.data());
@@ -81,9 +81,9 @@ function collect_children(view) {
 	  .duration(5000)
 	  .attrTween("d", arcTween)
 	  .style("fill", function(d) {
-	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	    var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
 	    return color(name); });
-
+	
 	path.data(newdata).enter().append("path")
 	  .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
 	  .attr("d", arc)
@@ -100,7 +100,7 @@ function collect_children(view) {
 	  .duration(5000)
 	  .attrTween("transform",textTween)
 	  .text(function(d) { return d.size>minsize ? d.name: ""; });
-
+	
 	text.data(newdata).enter().append("text").attr("opacity", 0)
 	  .transition()
 	  .duration(5000)
@@ -112,7 +112,6 @@ function collect_children(view) {
 	  .text(function(d) { return d.size>minsize ? d.name: ""; });
       }
     });
-    
   });
 }
 

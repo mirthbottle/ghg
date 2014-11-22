@@ -17,12 +17,17 @@
 	<h5> There are many ways to combat climate change since GHG emissions is a byproduct of most of our activities.  Does the transportation system or buildings result in more emissions?  Is it different for different states?  Are the end users the private sector, public sector, or residents?  Global GHG emissions can be organized by process, jurisdiction, products and services, industry, type of end user, company, etc.  Students and young professionals may be able to benefit from a visualization tool to help them choose between fields and specializations.</h5><br>
 	<h5>Below is an example of one way to visualize the total global GHG emissions using data.</h5>
       </div>
-      <p><button class="btn btn-default btn-lg" id="animate">Rearrange</button><br>
-	<button class="btn btn-default btn-lg" onclick="change_display('enduse')">Display US 2011 End Use Data</button>
-	<button class="btn btn-default btn-lg" onclick="change_display('source')">Display Global 2011 Source Data</button>
-      </p>
-      <input id="view" type="hidden" value="enduse"></input>
-      <input id="animated" type="hidden" value="false"></input>
+      <div align="center">
+	<div style="float:left">
+	  <h3>Global 2011 Source Data</h3><br>
+	  <button class="btn btn-default btn-lg" onclick="change_display('source', 1)">See View 1 </button><br>
+	  <button class="btn btn-default btn-lg" id="animate1" onclick="change_display('source', 2)">Switch to View 2</button></div>
+	<div style="float:right">
+	  <h3>US 2011 End Use Data</h3><br>
+	  <button class="btn btn-default btn-lg" onclick="change_display('enduse', 1)">See View 1</button><br>
+      	  <button class="btn btn-default btn-lg" id="animate2" onclick="change_display('enduse', 2)" disabled>Switch to View 2</button></div>
+	</div>
+      <input id="dataset" type="hidden" value="source"></input>
     </div>
     <div id="chart" align="middle">
     </div>
@@ -36,15 +41,25 @@
   <script>
     collect_children("source");
 
-    function change_display(view) {
-      var current_view = document.getElementById("view");
-      var animated = document.getElementById("animated");
-      if (current_view != view){
+    function change_display(dataset, view) {
+      var current_dataset = document.getElementById("dataset");
+      var obutton_name = dataset == "source" ? "animate2" : "animate1";
+      var button_name = dataset == "source" ? "animate1" : "animate2";
+      if (current_dataset.value != dataset){
         d3.select("svg").remove();
-        collect_children(view);
-        current_view.value = view;
-        animated.value = false;
+        collect_children(dataset);
+        current_dataset.value = dataset;
+        document.getElementById(obutton_name).disabled = true;
+        document.getElementById(button_name).disabled = false;
+      }
+      else {
+        if(view == 1){
+          d3.select("svg").remove();
+          collect_children(dataset);
+          current_dataset.value = dataset;
+        }
       }
     }
+
   </script>
 </html>
