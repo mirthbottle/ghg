@@ -93,7 +93,10 @@ function collect_children(view) {
 	path
 	  .transition()
 	  .duration(5000)
-	  .attrTween("d", arcTween);
+	  .attrTween("d", arcTween)
+	  .style("fill", function(d) {
+	    var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	    return color(name); });
 	
 	text.data(newdata).enter().append("text").attr("opacity", 0.1)
 	  .transition()
