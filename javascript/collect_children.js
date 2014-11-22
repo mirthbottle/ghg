@@ -96,9 +96,15 @@ function collect_children(view) {
 	  .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
 	
 	text
+	  .transition()
+	  .duration(5000)
 	  .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
 	  .text(function(d) { return d.size>minsize ? d.name: ""; });
-	text.data(newdata).enter().append("text")
+
+	text.data(newdata).enter().append("text").attr("opacity", 0)
+	  .transition()
+	  .duration(5000)
+	  .attr("opacity", 1)
 	  .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
 	  .attr("text-anchor", "middle")
 	  .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
@@ -138,6 +144,10 @@ function arcTween(a) {
   };
 }
 
+// Interpolate the text so it matches the arcs
+function textTween(a){
+  var i = d3.interpolate({x: a.x0, dx: a.dx0}, a);
+}
 function modPartition(p) {
   var new_parents = [];
   var names = [];
