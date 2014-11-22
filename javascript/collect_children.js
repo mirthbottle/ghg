@@ -96,10 +96,16 @@ function collect_children(view) {
 	  .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
 	
 	text
-	  .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+	  .transition()
+	  .duration(5000)
+	  .attrTween("transform",textTween)
 	  .text(function(d) { return d.size>minsize ? d.name: ""; });
-	text.data(newdata).enter().append("text")
-	  .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+
+	text.data(newdata).enter().append("text").attr("opacity", 0)
+	  .transition()
+	  .duration(5000)
+	  .attr("opacity", 1)
+	  .attrTween("transform",textTween)
 	  .attr("text-anchor", "middle")
 	  .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
 	  .style("fill", "#444")
@@ -136,6 +142,31 @@ function arcTween(a) {
     a.dx0 = b.dx;
     return arc(b);
   };
+}
+
+// Interpolate the text so it matches the arcs
+// attribute to edit is transform
+// compute intermediate arc.centroid(d) and rotateText(d)
+function textTween(a){
+  var j = d3.interpolate({x: a.x0, dx: a.dx0}, a);
+  // .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+  return function(t) {
+    var b = j(t);
+    a.x0 = b.x;
+    a.dx0 = b.dx;
+    return "translate(" + arc.centroid(b)  + ")" + "rotate(" + rotateText(b) + ")" ;
+  }
+}
+
+function newtextTween(a){
+  var j = d3.interpolate({x: 5, dx: 0}, a);
+  // .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
+  return function(t) {
+    var b = j(t);
+    a.x0 = b.x;
+    a.dx0 = b.dx;
+    return "translate(" + arc.centroid(b)  + ")" + "rotate(" + rotateText(b) + ")" ;
+  }
 }
 
 function modPartition(p) {
@@ -183,8 +214,8 @@ function modPartition(p) {
       else {
 	// make new parent nodes
 	var parent = jQuery.extend({}, d.parent);
-	parent.x0 = 0;
-	parent.dx0 = 0;
+	parent.x0 = d.parent.x0;
+	parent.dx0 = d.parent.dx0;
 	parent.x = d.x;
 	parent.dx = d.dx;
 	parent.size = d.size;
