@@ -1,35 +1,26 @@
 var ghgs;
 var newdata;
 function invertibleSunburst(root) {
+  ghgs = root;
+
   var width = 800,
   height = 800,
   radius = Math.min(width, height)*.4,
   color = d3.scale.category20c(),
-  minsize = 300;
+  minsize = 300,
+  animated = false;
   
   var partition = d3.layout.partition()
     .sort(null)
     .size([2 * Math.PI, radius * radius])
     .value(function(d) { return d.size; });
-  
+
+  /* draw arc functions */
   var arc = d3.svg.arc()
     .startAngle(function(d) { return d.x; })
     .endAngle(function(d) { return d.x + d.dx; })
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
-  var animated = false;
-
-  var svg = d3.select("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height * .5 + ")");
-
-  var tooltip = d3.select("body").append("div")
-    .attr("class", "tooltip")
-    .style("position", "absolute")
-    .style("z-index", "10")
-    .style("visibility", "hidden");
 
   colorArc = function(d) {
     var name = d.parent ? d.parent.name : "";
@@ -42,6 +33,13 @@ function invertibleSunburst(root) {
     return color(name); 
   }
 
+  /* tooltip functions */
+  var tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("position", "absolute")
+    .style("z-index", "10")
+    .style("visibility", "hidden");
+
   function addTooltip(selection){
     selection
       .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e " + d.name);})
@@ -49,12 +47,44 @@ function invertibleSunburst(root) {
       .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
   }
 
+  /* text functions */
+  // how to rotate text
+  function rotateText(d) {
+    // Offset the angle by 90 deg since the '0' degree axis for arc is Y axis, while
+    // for text it is the X axis.
+    var thetaDeg = (180 / Math.PI * (arc.startAngle()(d) + arc.endAngle()(d)) / 2 - 90);
+    // If we are rotating the text by more than 90 deg, then "flip" it.
+    // This is why "text-anchor", "middle" is important, otherwise, this "flip" would
+    // a little harder.
+    return (thetaDeg > 90) ? thetaDeg - 180 : thetaDeg;
+  }
+
+
+  function textCentroid(d){
+    var label_d = jQuery.extend({}, d);
+    if (d.depth == 2){
+      label_d.x = d.x + d.dx/10;
+    }
+    return arc.centroid(label_d);
+  }
   transformText = function(d) { 
     return "translate(" + textCentroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; 
   }
+  function drawText(selection){
+    selection
+      .attr("text-anchor", "middle")
+      .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
+      .style("fill", "#444")
+      .text(function(d) { return d.size>300 ? d.name: ""; });
+  }  
 
-  ghgs = root;
-  
+  /* draw chart */
+  var svg = d3.select("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height * .5 + ")");
+
   var g = svg.datum(root).selectAll("path")
     .data(partition.nodes);
 
@@ -69,10 +99,7 @@ function invertibleSunburst(root) {
 
   var text = g.enter().append("text")
     .attr("transform", transformText)
-    .attr("text-anchor", "middle")
-    .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
-    .style("fill", "#444")
-    .text(function(d) { return d.size>minsize ? d.name: ""; });
+    .call(drawText);
   
   d3.selectAll("#animate1, #animate2").on("click", function change() {
     if (animated == false) {
@@ -103,10 +130,7 @@ function invertibleSunburst(root) {
 	.duration(5000)
 	.attr("opacity", 1)
 	.attrTween("transform",textTween)
-	.attr("text-anchor", "middle")
-	.style("font-size", function(d) { return (12/d.depth+6)+"px"; })
-	.style("fill", "#444")
-	.text(function(d) { return d.size>minsize ? d.name: ""; });
+	.call(drawText);
 
       text
 	.transition()
@@ -114,17 +138,6 @@ function invertibleSunburst(root) {
 	.attrTween("transform",textTween);
     }
   });
-
-  // how to rotate text
-  function rotateText(d) {
-    // Offset the angle by 90 deg since the '0' degree axis for arc is Y axis, while
-    // for text it is the X axis.
-    var thetaDeg = (180 / Math.PI * (arc.startAngle()(d) + arc.endAngle()(d)) / 2 - 90);
-    // If we are rotating the text by more than 90 deg, then "flip" it.
-    // This is why "text-anchor", "middle" is important, otherwise, this "flip" would
-    // a little harder.
-    return (thetaDeg > 90) ? thetaDeg - 180 : thetaDeg;
-  }
 
   // Stash the old values for transition.
   function stash(d) {
@@ -143,13 +156,6 @@ function invertibleSunburst(root) {
     };
   }
 
-  function textCentroid(d){
-    var label_d = jQuery.extend({}, d);
-    if (d.depth == 2){
-      label_d.x = d.x + d.dx/10;
-    }
-    return arc.centroid(label_d);
-  }
   // Interpolate the text so it matches the arcs
   // attribute to edit is transform
   // compute intermediate arc.centroid(d) and rotateText(d)
