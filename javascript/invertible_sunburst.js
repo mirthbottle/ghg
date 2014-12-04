@@ -1,6 +1,7 @@
 var ghgs;
 var newdata;
-var olddata;
+var path;
+var newpaths;
 function invertibleSunburst(root) {
   ghgs = root;
 
@@ -86,10 +87,11 @@ function invertibleSunburst(root) {
     .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height * .5 + ")");
 
-  var g = svg.datum(root).selectAll("path")
-    .data(partition.nodes);
+  var gpaths = svg.append("g").attr("id", "gpaths");
+  var gtexts = svg.append("g").attr("id", "gtext");
 
-  var path = g.enter().append("path")
+  path = gpaths.selectAll("path").data(partition.nodes(root));
+  path.enter().append("path")
     .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
     .attr("d", arc)
     .style("stroke", "#fff")
@@ -98,50 +100,67 @@ function invertibleSunburst(root) {
     .call(addTooltip)
     .each(stash);
 
-  var text = g.enter().append("text")
+  var text = gtexts.selectAll("path").data(partition.nodes(root));
+  text.enter().append("text")
     .attr("transform", transformText)
     .call(drawText);
 
-  olddata = path.data();
   d3.selectAll("#animate1, #animate2").on("click", function change() {
     if (animated == false) {
       animated = true;
       newdata = invertPartition(path.data());
+      newpaths = path.data(newdata);
+
+      newpaths.enter().insert("path")
+	.attr("opacity", 0)
+	.call(addTooltip)
+	.transition()
+	.duration(5000)
+	.attrTween("d", arcTween)
+	.style("stroke", "#fff")
+	.style("fill", function(d) {
+	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	  return color(name); })
+	.attr("opacity", 1);
+  
+      newpaths.enter().append("text").attr("opacity", 0.1)
+	.transition()
+	.duration(5000)
+	.attr("opacity", 1)
+	.attrTween("transform",textTween)
+	.call(drawText);
+
+      path
+	.transition()
+	.duration(5000)
+	.attrTween("d", arcTween)
+	.style("fill", function(d) {
+	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	  return color(name); });
+      text
+	.transition()
+	.duration(5000)
+	.attrTween("transform",textTween);
+      
     }
     else {
-      newdata = revertPartition(path.data());
+      newdata = revertPartition(newpaths.data());
+
+      d3.selectAll("path")
+	.transition()
+	.duration(5000)
+	.attrTween("d", arcTween)
+	.style("fill", function(d) {
+	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	  return color(name); });
+
+      d3.selectAll("text")
+	.transition()
+	.duration(5000)
+	.attrTween("transform",textTween);
     }
       
-    path.data(newdata).enter().append("path").attr("opacity", 0)
-      .call(addTooltip)
-      .transition()
-      .duration(5000)
-      .attrTween("d", arcTween)
-      .style("stroke", "#fff")
-      .style("fill", function(d) {
-	var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	return color(name); })
-      .attr("opacity", 1);
-    
-    path
-      .transition()
-      .duration(5000)
-      .attrTween("d", arcTween)
-      .style("fill", function(d) {
-	var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	return color(name); });
-    
-    text.data(newdata).enter().append("text").attr("opacity", 0.1)
-      .transition()
-      .duration(5000)
-      .attr("opacity", 1)
-      .attrTween("transform",textTween)
-      .call(drawText);
 
-    text
-      .transition()
-      .duration(5000)
-      .attrTween("transform",textTween);
   });
   
   // Stash the old values for transition.
