@@ -1,5 +1,6 @@
 var ghgs;
 var newdata;
+var olddata;
 function invertibleSunburst(root) {
   ghgs = root;
 
@@ -100,47 +101,53 @@ function invertibleSunburst(root) {
   var text = g.enter().append("text")
     .attr("transform", transformText)
     .call(drawText);
-  
+
+  olddata = path.data();
   d3.selectAll("#animate1, #animate2").on("click", function change() {
     if (animated == false) {
       animated = true;
-      newdata = modPartition(path.data());
-      
-      path.data(newdata).enter().append("path").attr("opacity", 0)
-	.call(addTooltip)
-	.transition()
-	.duration(5000)
-	.attrTween("d", arcTween)
-	.style("stroke", "#fff")
-	.style("fill", function(d) {
-	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	  return color(name); })
-	.attr("opacity", 1);
-
-      path
-	.transition()
-	.duration(5000)
-	.attrTween("d", arcTween)
-	.style("fill", function(d) {
-	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	  return color(name); });
-      
-      text.data(newdata).enter().append("text").attr("opacity", 0.1)
-	.transition()
-	.duration(5000)
-	.attr("opacity", 1)
-	.attrTween("transform",textTween)
-	.call(drawText);
-
-      text
-	.transition()
-	.duration(5000)
-	.attrTween("transform",textTween);
+      newdata = invertPartition(path.data());
     }
-  });
+    else {
+      newdata = revertPartition(path.data());
+    }
+      
+    path.data(newdata).enter().append("path").attr("opacity", 0)
+      .call(addTooltip)
+      .transition()
+      .duration(5000)
+      .attrTween("d", arcTween)
+      .style("stroke", "#fff")
+      .style("fill", function(d) {
+	var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	return color(name); })
+      .attr("opacity", 1);
+    
+    path
+      .transition()
+      .duration(5000)
+      .attrTween("d", arcTween)
+      .style("fill", function(d) {
+	var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	return color(name); });
+    
+    text.data(newdata).enter().append("text").attr("opacity", 0.1)
+      .transition()
+      .duration(5000)
+      .attr("opacity", 1)
+      .attrTween("transform",textTween)
+      .call(drawText);
 
+    text
+      .transition()
+      .duration(5000)
+      .attrTween("transform",textTween);
+  });
+  
   // Stash the old values for transition.
   function stash(d) {
+    d.x1 = d.x;
+    d.dx1 = d.dx;
     d.x0 = d.x;
     d.dx0 = d.dx;
   }
@@ -170,74 +177,66 @@ function invertibleSunburst(root) {
     }
   }
 
-  function modPartition(p) {
-    var new_parents = [];
-    var names = [];
-    var maxxs = [];
-    var offsets = [];
-    p.forEach(function(d){
-      if (d.depth == 2){
-	var i = names.indexOf(d.name);
-	if (i == -1) {
-	  names.push(d.name);
-	  maxxs.push(d.dx);  // the end of the first one
-	  d.x0 = d.x;
-	  d.dx0 = d.dx;
-	  d.x = 0;
-	}
-	else {
-	  d.x0 = d.x;
-	  d.dx0 = d.dx;
-	  d.x = maxxs[i];  // where the next one should be set to
-	  maxxs[i] += d.dx; // increment maxx
-	}
-      }
-    });
-
-    var c = 0;    
-    for(var j=0; j<maxxs.length; j++){
-      offsets[j] = c;
-      c += maxxs[j];
-    }
-
-    p.forEach(function(d){
-      if (d.depth == 2){
-	var i = names.indexOf(d.name);
-	d.x += offsets[i];
-	if (i == 0) {
-	  // change the parent to be the same as the child
-	  d.parent.x0 = d.parent.x;
-	  d.parent.dx0 = d.parent.dx;
-	  d.parent.x = d.x;
-	  d.parent.dx = d.dx;
-	  d.parent.size = d.size;
-	}
-	else {
-	  // make new parent nodes
-	  var parent = jQuery.extend({}, d.parent);
-	  parent.x0 = d.parent.x + d.parent.dx;
-	  parent.dx0 = 0;
-	  parent.x = d.x;
-	  parent.dx = d.dx;
-	  parent.size = d.size;
-	  parent.children = [d];
-	  new_parents.push(parent);
-	}
-      }
-      else if (d.depth == 3){
-	// child of energy category
-	var change = d.parent.x0 - d.parent.x;
-	d.x0 = d.x;
-	d.dx0 = d.dx;
-	d.x = d.x - change;
-      }
-    });
-    p = p.concat(new_parents);
-    return p;
-  }
 }
 
 
+function invertPartition(p) {
+  var new_parents = [];
+  var names = [];
+  var maxxs = [];
+  var offsets = [];
+  p.forEach(function(d){
+    if (d.depth == 2){
+      var i = names.indexOf(d.name);
+      if (i == -1) {
+	names.push(d.name);
+	maxxs.push(d.dx);  // the end of the first one
+	d.x = 0;
+      }
+      else {
+	d.x = maxxs[i];  // where the next one should be set to
+	maxxs[i] += d.dx; // increment maxx
+      }
+    }
+  });
+  
+  var c = 0;    
+  for(var j=0; j<maxxs.length; j++){
+    offsets[j] = c;
+      c += maxxs[j];
+  }
+  
+  p.forEach(function(d){
+    if (d.depth == 2){
+      var i = names.indexOf(d.name);
+      d.x += offsets[i];
+      if (i == 0) {
+	// change the parent to be the same as the child
+	d.parent.x = d.x;
+	d.parent.dx = d.dx;
+	d.parent.size = d.size;
+      }
+      else {
+	// make new parent nodes
+	var parent = jQuery.extend({}, d.parent);
+	parent.x0 = d.parent.x + d.parent.dx;
+	parent.dx0 = 0;
+	parent.x = d.x;
+	parent.dx = d.dx;
+	parent.size = d.size;
+	parent.children = [d];
+	new_parents.push(parent);
+      }
+    }
+    else if (d.depth == 3){
+      // child of energy category
+      var change = d.parent.x0 - d.parent.x;
+      d.x = d.x - change;
+    }
+  });
+  p = p.concat(new_parents);
+  return p;
+}
 function select_file(view){
   
   if (view == "source"){
@@ -251,14 +250,14 @@ function select_file(view){
   return [file, minsize];
 }
 
+// switch contents of x1 and x
+// x0 = x
 function revertPartition(p){
   p.forEach(function(d){
-    var tempx = d.x;
-    var tempdx = d.dx;
-    d.x = d.x0;
-    d.dx = d.dx0;
-    d.x0 = tempx;
-    d.dx0 = tempdx;
+    d.x = d.x1;
+    d.dx = d.dx1;
+    d.x1 = d.x0;
+    d.dx1 = d.dx0;
   });
   return p; 
 }
