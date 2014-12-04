@@ -1,105 +1,142 @@
-var width = 800,
-    height = 800,
-    radius = Math.min(width, height)*.4,
-    color = d3.scale.category20c();
+function timeSeriesChart() {
+  var margin = {top: 20, right: 20, bottom: 20, left: 20},
+      width = 760,
+      height = 120,
+      xValue = function(d) { return d[0]; },
+      yValue = function(d) { return d[1]; },
+      xScale = d3.time.scale(),
+      yScale = d3.scale.linear(),
+      xAxis = d3.svg.axis().scale(xScale).orient("bottom").tickSize(6, 0),
+      area = d3.svg.area().x(X).y1(Y),
+      line = d3.svg.line().x(X).y(Y);
 
-var partition = d3.layout.partition()
-    .sort(null)
-    .size([2 * Math.PI, radius * radius])
-    .value(function(d) { return d.size; });
+  function chart(selection) {
+    selection.each(function(data) {
 
-var arc = d3.svg.arc()
-    .startAngle(function(d) { return d.x; })
-    .endAngle(function(d) { return d.x + d.dx; })
-    .innerRadius(function(d) { return Math.sqrt(d.y); })
-    .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
+      // Convert data to standard representation greedily;
+      // this is needed for nondeterministic accessors.
+      data = data.map(function(d, i) {
+        return [xValue.call(data, d, i), yValue.call(data, d, i)];
+      });
 
-var ghgs;
-var path;
-var svg;
-function draw_chart(order) {
-  svg = d3.select("#chart").append("svg")
-    .attr("width", width)
-    .attr("height", height)
-    .append("g")
-    .attr("transform", "translate(" + width / 2 + "," + height * .5 + ")");
+      // Update the x-scale.
+      xScale
+          .domain(d3.extent(data, function(d) { return d[0]; }))
+          .range([0, width - margin.left - margin.right]);
 
-  var file = "demo_emissions.json";
+      // Update the y-scale.
+      yScale
+          .domain([0, d3.max(data, function(d) { return d[1]; })])
+          .range([height - margin.top - margin.bottom, 0]);
 
-  d3.select(self.frameElement).style("height", height + "px");
+      // Select the svg element, if it exists.
+      var svg = d3.select(this).selectAll("svg").data([data]);
 
-  d3.json(file, function(error, root) { 
-    if (error) return console.warn(error);
-    ghgs = root;
-    var tooltip = d3.select("body").append("div")
-      .attr("class", "tooltip")
-      .style("position", "absolute")
-      .style("z-index", "10")
-      .style("visibility", "hidden");
-    
-    var p = svg.datum(ghgs).selectAll("path")
-      .data(partition.nodes);
-    
-    p.enter().append("path")
-      .attr("display", function(d) { 
-	return d.depth ? null : "none"; }) // hide inner ring
-      .attr("d", arc)
-      .style("stroke", "#fff")
-      .style("fill", function(d) { 
-	var name = d.parent ? d.parent.name : "";
-	if (name != ""){
-	  name = d.parent.parent ? "" : d.name;
-	  if (name == "") {
-	    name = d.parent.parent.parent ? d.parent.parent.name : d.parent.name;
-	  }
-	}
-	return color(name); })
-      .style("fill-rule", "evenodd")
-      .on("mouseover", function(d){return tooltip.style("visibility", "visible").text(d.size + " MtCO2e");})
-      .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX + 20)+"px");})
-      .on("mouseout", function(){return tooltip.style("visibility", "hidden");})
-      .each(stash);
+      // Otherwise, create the skeletal chart.
+      var gEnter = svg.enter().append("svg").append("g");
+      gEnter.append("path").attr("class", "area");
+      gEnter.append("path").attr("class", "line");
+      gEnter.append("g").attr("class", "x axis");
 
-    p = addLabels(p);
-  });
-}
+      // Update the outer dimensions.
+      svg .attr("width", width)
+          .attr("height", height);
 
-function addLabels(p){
-  p.enter().append("text")
-    .attr("transform", function(d) { return "translate(" + arc.centroid(d)  + ")" + "rotate(" + rotateText(d) + ")" ; })
-    .attr("text-anchor", "middle")
-    .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
-    .style("fill", "#444")
-      .style("z-index", "2")
-    .text(function(d) { return d.size>300 ? d.name: ""; });
-  return p;
-}
+      // Update the inner dimensions.
+      var g = svg.select("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+      // Update the area path.
+      g.select(".area")
+          .attr("d", area.y0(yScale.range()[0]));
 
-// how to rotate text
-function rotateText(d) {
-  // Offset the angle by 90 deg since the '0' degree axis for arc is Y axis, while
-  // for text it is the X axis.
-  var thetaDeg = (180 / Math.PI * (arc.startAngle()(d) + arc.endAngle()(d)) / 2 - 90);
-  // If we are rotating the text by more than 90 deg, then "flip" it.
-  // This is why "text-anchor", "middle" is important, otherwise, this "flip" would
-  // a little harder.
-  return (thetaDeg > 90) ? thetaDeg - 180 : thetaDeg;
-}
+      // Update the line path.
+      g.select(".line")
+          .attr("d", line);
 
-// Stash the old values for transition.
-function stash(d) {
-  d.x0 = d.x;
-  d.dx0 = d.dx;
-}
+      // Update the x-axis.
+      g.select(".x.axis")
+          .attr("transform", "translate(0," + yScale.range()[0] + ")")
+          .call(xAxis);
+    });
+  }
 
-// Interpolate the arcs in data space.
-function arcTween(a) {
-  var i = d3.interpolate({x: a.x0, dx: a.dx0}, a);
-  return function(t) {
-    var b = i(t);
-    a.x0 = b.x;
-    a.dx0 = b.dx;
-    return arc(b);
+  // The x-accessor for the path generator; xScale ∘ xValue.
+  function X(d) {
+    return xScale(d[0]);
+  }
+
+  // The x-accessor for the path generator; yScale ∘ yValue.
+  function Y(d) {
+    return yScale(d[1]);
+  }
+
+  chart.margin = function(_) {
+    if (!arguments.length) return margin;
+    margin = _;
+    return chart;
   };
+
+  chart.width = function(_) {
+    if (!arguments.length) return width;
+    width = _;
+    return chart;
+  };
+
+  chart.height = function(_) {
+    if (!arguments.length) return height;
+    height = _;
+    return chart;
+  };
+
+  chart.x = function(_) {
+    if (!arguments.length) return xValue;
+    xValue = _;
+    return chart;
+  };
+
+  chart.y = function(_) {
+    if (!arguments.length) return yValue;
+    yValue = _;
+    return chart;
+  };
+
+  return chart;
 }
+
+
+// put on html page to call function
+
+d3.csv("javascript/time_series_data.csv", function(data) {
+  var formatDate = d3.time.format("%b %Y");
+  
+  d3.select("#example")
+    .datum(data)
+    .call(timeSeriesChart()
+	  .x(function(d) { return formatDate.parse(d.date); })
+	  .y(function(d) { return +d.price; }));
+});
+
+// style and container
+/*
+<p id="example">
+#example {
+  margin-left: -20px;
+}
+
+.line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+.area {
+  fill: #969696;
+}
+
+.attention {
+  background: yellow;
+  margin: -4px;
+  padding: 4px;
+}
+*/
