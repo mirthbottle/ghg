@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link href="/ghg/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/ghg/css/tooltip.css" rel="stylesheet">
+    <link href="/ghg/bootstrap/css/jumbotron-narrow.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="/ghg/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/ghg/javascript/d3.js"></script>
+    <script src="/ghg/javascript/invertible_sunburst.js"></script>
+ 
+  </head>
+  <body>
+    <div class="container">
+      <div class="jumbotron">
+	Invertible
+	<button class="btn btn-default btn-lg" id="animate1">Switch to View 2</button>
+      </div>
+      <p id="example">
+	
+    </div>
+  </body>
+  <script>
+    var file = "demo_emissions.json";
+    var svg = d3.select("#example").append("svg");
+
+    d3.json(file, function(error, root) {
+      invertibleSunburst(root);
+    });
+
+  </script>
+</html>
