@@ -68,5 +68,12 @@
       }
     }
 
+    $("#animate1").click(function() {
+       var btn = document.getElementById("animate1");
+       btn.disabled = true;
+       setTimeout(function(){
+         btn.disabled = false;
+         }, 5000);
+    });
   </script>
 </html>
