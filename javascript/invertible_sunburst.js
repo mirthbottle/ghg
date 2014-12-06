@@ -2,14 +2,12 @@ var ghgs;
 var newdata;
 var path;
 var newpaths;
-function invertibleSunburst(root) {
+function invertibleSunburst(root, width, minsize) {
   ghgs = root;
 
-  var width = 800,
-  height = 800,
+  var height = 800,
   radius = Math.min(width, height)*.4,
   color = d3.scale.category20c(),
-  minsize = 300,
   animated = false;
   
   var partition = d3.layout.partition()
@@ -256,9 +254,9 @@ function invertPartition(p) {
   p = p.concat(new_parents);
   return p;
 }
-function select_file(view){
+function selectFile(dataset){
   
-  if (view == "source"){
+  if (dataset == "source"){
     var file = "demo_emissions.json";
     var minsize = 300;
   }
