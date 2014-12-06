@@ -75,7 +75,7 @@ function invertibleSunburst(root, width, minsize) {
       .attr("text-anchor", "middle")
       .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
       .style("fill", "#444")
-      .text(function(d) { return d.size>300 ? d.name: ""; });
+      .text(function(d) { return d.size>minsize ? d.name: ""; });
   }  
 
   /* draw chart */
