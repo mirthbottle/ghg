@@ -8,30 +8,26 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
     <script src="/javascript/d3.js"></script>
-    <script src="/javascript/collect_children.js"></script>
+    <script src="/javascript/invertible_sunburst.js"></script>
  
   </head>
   <body>
     <div class="container">
-      <div class="jumbotron">
+      <div class="jumbotron" id="midsection">
 	<h1> GHG Emissions Vistas</h1>
 	<h5> There are many ways to combat climate change since GHG emissions is a byproduct of most of our activities.  Does the transportation system or buildings result in more emissions?  Is it different for different states?  Are the end users the private sector, public sector, or residents?  Global GHG emissions can be organized by process, jurisdiction, products and services, industry, type of end user, company, etc.  Students and young professionals may be able to benefit from a visualization tool to help them choose between fields and specializations.</h5><br>
 	<h5>Below are examples of ways to visualize GHG emissions using two datasets. View1 groups emissions by the innermost ring.  View2 regroups emissions by the second ring.</h5>
       </div>
       <p> Play with the buttons!  Mouse over to see the amounts of emissions in each category.</p>
       <div align="center">
-	<div style="float:left">
-	  <h3>Global 2011 Source Data</h3><br>
-	  <button class="btn btn-default btn-lg" onclick="change_display('source', 1)">See View 1 </button><br>
-	  <button class="btn btn-default btn-lg" id="animate1" onclick="change_display('source', 2)">Switch to View 2</button></div>
-	<div style="float:right">
-	  <h3>US 2011 End Use Data</h3><br>
-	  <button class="btn btn-default btn-lg" onclick="change_display('enduse', 1)">See View 1</button><br>
-      	  <button class="btn btn-default btn-lg" id="animate2" onclick="change_display('enduse', 2)" disabled>Switch to View 2</button></div>
+	<div class="btn-group" style="margin:20px">
+	  <button id="source" class="btn btn-default btn-lg active" onclick="change_display('source')">Global 2011 Source Data</button>
+	  <button id="enduse" class="btn btn-default btn-lg" onclick="change_display('enduse')">US 2011 End Use Data</button>
 	</div>
-      <input id="dataset" type="hidden" value="source"></input>
-      <div id="chart" align="middle">
+	<button class="btn btn-default btn-lg" id="animate1">Switch Views</button>
       </div>
+      <input id="dataset" type="hidden" value="source"></input>
+      <div id="chart" align="middle"></div>
       <h2>Global 2011 Source Data is from</h2>
       <h4>Total GHG Emissions Excluding Land-Use Change and Forestry (MtCO2e)</h4>
       <p>WRI, CAIT 2.0. 2014. Climate Analysis Indicators Tool: WRI's Climate Data Explorer. Washington, DC: World Resources Institute. Available at: <a href="http://cait2.wri.org">http://cait2.wri.org</a></p>
@@ -44,25 +40,31 @@
     </div>
   </body>
   <script>
-    collect_children("source");
+    var width = document.getElementById("midsection").offsetWidth;
+    var file = "demo_emissions.json";
+    var svg = d3.select("#chart").append("svg");
 
-    function change_display(dataset, view) {
+    d3.json(file, function(error, root) {
+      invertibleSunburst(root, width, 300);
+    });
+
+    function change_display(dataset) {
       var current_dataset = document.getElementById("dataset");
-      var obutton_name = dataset == "source" ? "animate2" : "animate1";
-      var button_name = dataset == "source" ? "animate1" : "animate2";
-      if (current_dataset.value != dataset){
+      if(current_dataset.value != dataset) {
+        var sf = selectFile(dataset);
+        file = sf[0];
+        minsize = sf[1];
+        width = document.getElementById("midsection").offsetWidth;
         d3.select("svg").remove();
-        collect_children(dataset);
+        d3.select("#chart").append("svg");
+        d3.json(file, function(error, root) {
+          invertibleSunburst(root, width, minsize);
+        });
+
+        var other_dataset = dataset == "source" ? "enduse" : "source";
+        document.getElementById(dataset).className = "btn btn-default btn-lg active";
+        document.getElementById(other_dataset).className = "btn btn-default btn-lg";
         current_dataset.value = dataset;
-        document.getElementById(obutton_name).disabled = true;
-        document.getElementById(button_name).disabled = false;
-      }
-      else {
-        if(view == 1){
-          d3.select("svg").remove();
-          collect_children(dataset);
-          current_dataset.value = dataset;
-        }
       }
     }
 
