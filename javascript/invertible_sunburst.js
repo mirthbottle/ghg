@@ -2,6 +2,7 @@ var ghgs;
 var newdata;
 var path;
 var newpaths;
+var newtexts;
 var newsibs;
 var newsibsg;
 function invertibleSunburst(root, width, minsize) {
@@ -106,17 +107,20 @@ function invertibleSunburst(root, width, minsize) {
     .call(addTooltip)
     .each(stash);
 
-  var text = gtexts.selectAll("path").data(partition.nodes(root));
+  var text = gtexts.selectAll("text").data(partition.nodes(root));
   text.enter().append("text")
     .attr("transform", transformText)
     .call(drawText);
 
   newsibsg = gpaths.append("g").attr("id", "newsibsg");
+  var view = 2;
+  new_siblings = [];
   d3.selectAll("#animate1, #animate2").on("click", function change() {
     if (animated == false) {
       animated = true;
       newdata = invertPartition(path.data());
       newpaths = path.data(newdata);
+      newtexts = text.data(newdata);
 
       newpaths.enter().insert("path")
 	.attr("opacity", 0)
@@ -140,13 +144,22 @@ function invertibleSunburst(root, width, minsize) {
 	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
 	  return color(name); });
   
-      var newtexts = text.data(newdata.concat(new_siblings));
-      newtexts.enter().append("text").attr("opacity", 0.1)
+      newsibsg.selectAll("text").data(new_siblings).enter().append("text")
+	.attr("opacity", 0.1)
 	.transition()
 	.duration(5000)
 	.attr("opacity", 1)
 	.attrTween("transform",textTween)
 	.call(drawText);
+
+      newtexts.enter().append("text")
+	.attr("opacity", 0.1)
+	.transition()
+	.duration(5000)
+	.attr("opacity", 1)
+	.attrTween("transform",textTween)
+	.call(drawText);
+
 
       path
 	.transition()
@@ -171,12 +184,6 @@ function invertibleSunburst(root, width, minsize) {
       newdata = revertPartition(newpaths.data());
       new_siblings = revertPartition(new_siblings);
 
-      newsibsg.selectAll("path")
-	.remove();
-	//.transition()
-	//.attrTween("d", arcTween)
-	//.duration(1);
-      
       newpaths
 	.transition()
 	.duration(5000)
@@ -189,6 +196,46 @@ function invertibleSunburst(root, width, minsize) {
 	.transition()
 	.duration(5000)
 	.attrTween("transform",textTween);
+      
+      if (view == 2) {
+	newsibsg.selectAll("path")
+	  .remove();
+	
+	newsibsg.selectAll("text")
+	  .remove();
+
+	newtexts
+	  .call(drawText);
+	view = 1;
+      }
+      else {	
+	newsibsg.selectAll("path").data(new_siblings).enter().append("path")
+	  .call(addTooltip)
+	  .transition()
+	  .delay(5000)
+	  .attrTween("d", arcTween)
+	  .style("stroke", "#fff")
+	  .style("fill", function(d) {
+	    var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	    return color(name); });
+
+	newsibsg.selectAll("text").data(new_siblings).enter().append("text")
+	  .attr("opacity", 0.1)
+	  .transition()
+	  .duration(5000)
+	  .attr("opacity", 1)
+	  .attrTween("transform",textTween)
+	  .call(drawText);
+	
+	text
+	  .text(function(d) {
+	    if (d.depth == 2) {
+	      return "";}
+	    else {
+	      return d.size>minsize ? d.name: "";}
+	  });
+
+	view = 2; }
     }
       
 
