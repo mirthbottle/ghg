@@ -35,7 +35,6 @@
       <h4>Table 2-12: U.S. Greenhouse Gas Emissions Allocated to Economic Sectors (Tg CO2 Eq. and Percent of Total in 2011)</h4>
       <p>EPA, US GHG Inventory 2013: Chapter 2 Trends in Greenhouse Gas Emissions. Washington, DC: EPA. Available at: <a href="http://www.epa.gov/climatechange/Downloads/ghgemissions/US-GHG-Inventory-2013-Chapter-2-Trends.pdf">http://www.epa.gov/climatechange/Downloads/ghgemissions/US-GHG-Inventory-2013-Chapter-2-Trends.pdf</a></p>
       
-      <iframe src="https://docs.google.com/forms/d/1bZLqnAw98hSKtodzme2TSCmb4XsCJ6zB8LhrHnVFqKY/viewform?embedded=true" width="760" height="500" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
       
     </div>
   </body>
@@ -46,21 +45,23 @@
     var chart;
 
     d3.json(file, function(error, root) {
-      chart = invertible.sunburst(root, width, 300);
+      chart = inSun(root, width, 300);
+      chart.draw()
       d3.selectAll("#animate1, #animate2").on("click", chart.change);
     });
 
     function change_display(dataset) {
       var current_dataset = document.getElementById("dataset");
       if(current_dataset.value != dataset) {
-        var sf = invertible.selectFile(dataset);
+        var sf = selectFile(dataset);
         file = sf[0];
         var minsize = sf[1];
         width = document.getElementById("midsection").offsetWidth;
         d3.select("svg").remove();
         d3.select("#chart").append("svg");
         d3.json(file, function(error, root) {
-          chart = invertible.sunburst(root, width, minsize);
+          chart = inSun(root, width, minsize);
+          chart.draw();
           d3.selectAll("#animate1, #animate2").on("click", chart.change);
         });
 

@@ -1,23 +1,25 @@
-var tries = {
-  s: [2, 4, 44],
-  a: function () {
-    var m = 5;
-    var that = {};
-    that.x = 200;
-    that.c = function(p){
-      that.price = p;
-      return p + that.x + m;
-    }
-    return that;
-  },
-  b: function (price) {
-    return price*10;
-  },
-  d: {
+function tries() {
+  var s = [2, 4, 44];
+  var d = {
     e: function(){
       return 2;
     }
   }
+
+  var that = {
+    m: 5,
+    x: 200,
+    c: function(p){
+      that.price = p;
+      return p + d.e() + that.m;
+    }
+  }
+
+  that.b = function (price) {
+    return price*10;
+  }
+
+  return that;
 }
 
 var MYAPPLICATION = {
