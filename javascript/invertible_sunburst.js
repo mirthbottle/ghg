@@ -23,6 +23,8 @@ function inSun(root, width, minsize) {
     d1.dx0 = d2.dx0;
     d1.x = d2.x;
     d1.dx = d2.dx;
+    d1.x1 = d2.x1;
+    d1.dx1 = d2.dx1;
     d1.size = d2.size;
     return d1;
   }
@@ -133,6 +135,7 @@ function inSun(root, width, minsize) {
   var invertPartition = function(p) {
     var new_siblings = [];
     var new_parents = [];
+    var old_parents = [];
     var names = [];
     var maxxs = [];
     var new_sibling_sizes = [];
@@ -176,6 +179,7 @@ function inSun(root, width, minsize) {
 	var i = names.indexOf(d.name);
 	d.x += offsets[i];
 	if (i == 0) {
+	  old_parents.push(jQuery.extend({}, d.parent));
 	  // change the parent to be the same as the child
 	  d.parent = arc_copyxs(d.parent, d);
 	}
@@ -185,8 +189,6 @@ function inSun(root, width, minsize) {
 	  var parent = jQuery.extend({}, d.parent);
 	  parent.children = [d];
 	  parent = arc_copyxs(parent, d);
-	  parent.x1 = parent.x0;
-	  parent.dx1 = parent.dx0;
 	  new_parents.push(parent);
 	}
       }
@@ -196,7 +198,7 @@ function inSun(root, width, minsize) {
 	d.x = d.x - change;
       }
     });
-    return [p, new_siblings, new_parents];
+    return [p, new_siblings, new_parents, old_parents];
   }
 
   // switch contents of x1 and x
@@ -291,6 +293,7 @@ function inSun(root, width, minsize) {
     // make empty group containers for new siblings and new paths for view 2
     that.gnewsib_paths = gpaths.append("g").attr("id", "gnsibpaths");
     that.gnewrent_paths = gpaths.append("g").attr("id", "gnrentpaths");
+    that.goldrent_paths = gpaths.append("g").attr("id", "gorentpaths");
     that.gnewsib_texts = gtexts.append("g").attr("id", "gnsibtexts");
     that.gnewrent_texts = gtexts.append("g").attr("id", "gnrenttexts");
 
@@ -305,6 +308,7 @@ function inSun(root, width, minsize) {
       that.existing_data = ip[0];
       that.new_siblings = ip[1];
       that.new_parents = ip[2];
+      that.old_parents = ip[3];
       // handle the existing data, new siblings, and new parents separately
 
       that.path.data(that.existing_data)
@@ -347,6 +351,7 @@ function inSun(root, width, minsize) {
       that.existing_data = revertPartition(that.existing_data);
       that.new_siblings = revertPartition(that.new_siblings);
       that.new_parents = revertPartition(that.new_parents);
+      that.old_parents = revertPartition(that.old_parents);
       
       that.path.data(that.existing_data)
 	.call(addTooltip)
@@ -371,6 +376,17 @@ function inSun(root, width, minsize) {
 	  .duration(5000)
 	  .attrTween("transform",textTween)
 	  .remove();
+
+	// old parents paths show up after delay
+	that.goldrent_paths.selectAll("path").data(that.old_parents).enter().append("path")
+	  .call(addTooltip)
+	  .transition()
+	  .delay(5000)
+	  .attrTween("d", arcTween)
+	  .style("stroke", "#fff")
+	  .style("fill", function(d) {
+	    var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	    return color(name); });
 
 	that.gnewsib_paths.selectAll("path")
 	  .remove();
@@ -398,7 +414,10 @@ function inSun(root, width, minsize) {
 	// add new parent text again
 	that.gnewrent_texts.selectAll("text").data(that.new_parents).enter().append("text")
 	  .call(style_newrent_texts);
-	
+
+	// remove old parents
+	that.goldrent_paths.selectAll("path")
+	  .remove();
       }
       // redraw text
       that.text.data(that.existing_data)
