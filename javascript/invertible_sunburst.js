@@ -18,6 +18,15 @@ function inSun(root, width, minsize) {
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
   
+  var arc_copyxs = function(d1, d2){
+    d1.x0 = d2.x0;
+    d1.dx0 = d2.dx0;
+    d1.x = d2.x;
+    d1.dx = d2.dx;
+    d1.size = d2.size;
+    return d1;
+  }
+
   /* tooltip functions */
   var tooltip = d3.select("body").append("div")
       .attr("class", "tooltip")
@@ -35,7 +44,8 @@ function inSun(root, width, minsize) {
 	  .style("left",(event.pageX + 20)+"px");})
       .on("mouseout", function(){
 	return tooltip.style("visibility", "hidden");});
-    };
+  }
+
   /* text functions */
   // how to rotate text
   var textrotate = function(d) {
@@ -64,13 +74,61 @@ function inSun(root, width, minsize) {
     return "translate(" + textcentroid(d)  + ")" + "rotate(" + textrotate(d) + ")" ; 
   }
   
+  var textwrite = function(d){
+    var text = d.size>minsize ? d.name: "";
+    if (d.depth == 2 && that.view == 2){
+      text = "";
+    }
+    return text;
+  }
   var textdraw = function(selection){
     selection
+      .text(textwrite)
       .attr("text-anchor", "middle")
       .style("font-size", function(d) { return (12/d.depth+6)+"px"; })
-      .style("fill", "#444")
-      .text(function(d) { return d.size>minsize ? d.name: ""; });
+      .style("fill", "#444");
   }   // end of text functions
+
+  var style_newsib_paths = function(selection){
+    selection
+      .transition()
+      .delay(5000)
+      .attrTween("d", arcTween)
+      .style("stroke", "#fff")
+      .style("fill", function(d) {
+	var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	return color(name); });
+  }
+
+  var style_newsib_texts = function(selection){
+    selection
+      .attr("opacity", 0.1)
+      .transition()
+      .duration(5000)
+      .attr("opacity", 1)
+      .attrTween("transform",textTween);
+  }
+
+  var style_newrent_paths = function(selection){
+    selection
+      .style("stroke", "#fff")
+      .style("fill", function(d) {
+	var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
+	return color(name); })
+      .transition()
+      .duration(5000)
+      .attrTween("d", arcTween);
+  }
+  
+  var style_newrent_texts = function(selection){
+    selection
+      .attr("opacity", 0.1)
+      .transition()
+      .duration(5000)
+      .attr("opacity", 1)
+      .attrTween("transform",textTween)
+      .call(textdraw);
+  }
 
   var invertPartition = function(p) {
     var new_siblings = [];
@@ -119,19 +177,16 @@ function inSun(root, width, minsize) {
 	d.x += offsets[i];
 	if (i == 0) {
 	  // change the parent to be the same as the child
-	  d.parent.x = d.x;
-	  d.parent.dx = d.dx;
-	  d.parent.size = d.size;
+	  d.parent = arc_copyxs(d.parent, d);
 	}
 	else {
 	  // make new parent nodes
+	  // actually x0 and dx0 should be set as the sibling, not the parent
 	  var parent = jQuery.extend({}, d.parent);
-	  parent.x0 = d.parent.x + d.parent.dx;
-	  parent.dx0 = 0;
-	  parent.x = d.x;
-	  parent.dx = d.dx;
-	  parent.size = d.size;
 	  parent.children = [d];
+	  parent = arc_copyxs(parent, d);
+	  parent.x1 = parent.x0;
+	  parent.dx1 = parent.dx0;
 	  new_parents.push(parent);
 	}
       }
@@ -141,8 +196,7 @@ function inSun(root, width, minsize) {
 	d.x = d.x - change;
       }
     });
-    p = p.concat(new_parents);
-    return [p, new_siblings];
+    return [p, new_siblings, new_parents];
   }
 
   // switch contents of x1 and x
@@ -204,10 +258,12 @@ function inSun(root, width, minsize) {
   var that = {
     new_siblings: [],
     ghgs: root,
-    animated: false}
+    animated: false,
+    view: 1 }
 
   that.draw = function() {    
     /* draw chart */
+    that.view = 1;
     var svg = d3.select("svg")
       .attr("width", width)
       .attr("height", height)
@@ -232,137 +288,124 @@ function inSun(root, width, minsize) {
       .attr("transform", texttransform)
       .call(textdraw);
 
-    that.newsibsg = gpaths.append("g").attr("id", "newsibsg");
-    that.view = 2;
+    // make empty group containers for new siblings and new paths for view 2
+    that.gnewsib_paths = gpaths.append("g").attr("id", "gnsibpaths");
+    that.gnewrent_paths = gpaths.append("g").attr("id", "gnrentpaths");
+    that.gnewsib_texts = gtexts.append("g").attr("id", "gnsibtexts");
+    that.gnewrent_texts = gtexts.append("g").attr("id", "gnrenttexts");
 
   } // end of that.draw()
   
   that.change = function() {
     if (that.animated == false) {
-      // draw the first time
+      // draw view2 the first time
+      that.view = 2;
       that.animated = true;
       var ip = invertPartition(that.path.data());
-      var newdata = ip[0];
+      that.existing_data = ip[0];
       that.new_siblings = ip[1];
-      that.newpaths = that.path.data(newdata);
-      that.newtexts = that.text.data(newdata);
-      
-      that.newpaths.enter().insert("path")
-	.attr("opacity", 0)
-	  .call(addTooltip)
-	.transition()
-	.duration(5000)
-	.attrTween("d", arcTween)
-	.style("stroke", "#fff")
-	.style("fill", function(d) {
-	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	  return color(name); })
-	.attr("opacity", 1);
-      
-      that.newsibsg.selectAll("path").data(that.new_siblings).enter().append("path")
+      that.new_parents = ip[2];
+      // handle the existing data, new siblings, and new parents separately
+
+      that.path.data(that.existing_data)
 	.call(addTooltip)
 	.transition()
-	.delay(5000)
+	.duration(5000)
 	.attrTween("d", arcTween)
-	.style("stroke", "#fff")
-	.style("fill", function(d) {
+	.style("fill", function(d) { 
+	  // new colors for depth 2 arcs
 	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
 	  return color(name); });
+
+      that.text.data(that.existing_data)
+	.transition()
+	.duration(5000)
+	.attrTween("transform",textTween)
+	.text(textwrite);
+      
+      // new parent paths
+      that.gnewrent_paths.selectAll("path").data(that.new_parents).enter().append("path")
+	.call(addTooltip)
+      	.call(style_newrent_paths);
+
+      // new parent texts
+      that.gnewrent_texts.selectAll("text").data(that.new_parents).enter().append("text")
+	.call(style_newrent_texts);
+
+      // new sibling paths
+      that.gnewsib_paths.selectAll("path").data(that.new_siblings).enter().append("path")
+	.call(addTooltip)
+	.call(style_newsib_paths);
 	
-      that.newsibsg.selectAll("text").data(that.new_siblings).enter().append("text")
-	.attr("opacity", 0.1)
-	.transition()
-	.duration(5000)
-	.attr("opacity", 1)
-	.attrTween("transform",textTween)
-	.call(textdraw);
-      
-      that.newtexts.enter().append("text")
-	.attr("opacity", 0.1)
-	.transition()
-	.duration(5000)
-	.attr("opacity", 1)
-	.attrTween("transform",textTween)
-	.call(textdraw);
-      
-      
-      that.path
-	.transition()
-	.duration(5000)
-	.attrTween("d", arcTween)
-	.style("fill", function(d) {
-	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	  return color(name); });
-      that.text
-	.transition()
-	.duration(5000)
-	.attrTween("transform",textTween)
-	.text(function(d) {
-	  if (d.depth == 2) {
-	    return "";}
-	  else {
-	    return d.size>minsize ? d.name: "";}
-	});
-      
+      // new sibling texts
+      that.gnewsib_texts.selectAll("text").data(that.new_siblings).enter().append("text")
+	.call(style_newsib_texts)
+	.call(textdraw)
+	.text(function(d){ return d.size>minsize ? d.name: ""; });
     }
     else {
-      that.newdata = revertPartition(that.newpaths.data());
+      that.existing_data = revertPartition(that.existing_data);
       that.new_siblings = revertPartition(that.new_siblings);
+      that.new_parents = revertPartition(that.new_parents);
       
-      that.newpaths
+      that.path.data(that.existing_data)
+	.call(addTooltip)
 	.transition()
 	.duration(5000)
-	.attrTween("d", arcTween)
-	.style("fill", function(d) {
-	  var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	  return color(name); });
-      
-      d3.selectAll("text")
-	.transition()
-	.duration(5000)
-	.attrTween("transform",textTween);
-      
+	.attrTween("d", arcTween);
+
       if (that.view == 2) {
 	// transition back to view 1
-	that.newsibsg.selectAll("path")
-	  .remove();
-	
-	that.newsibsg.selectAll("text")
-	  .remove();
-	
-	that.newtexts
-	  .call(textdraw);
 	that.view = 1;
+
+	// new parent paths should move back
+	that.gnewrent_paths.selectAll("path").data(that.new_parents)
+	  .transition()
+	  .duration(5000)
+	  .attrTween("d", arcTween)
+	  .remove();
+	
+	// new parent texts should move back and then disappear
+	that.gnewrent_texts.selectAll("text")
+	  .transition()
+	  .duration(5000)
+	  .attrTween("transform",textTween)
+	  .remove();
+
+	that.gnewsib_paths.selectAll("path")
+	  .remove();
+	
+	that.gnewsib_texts.selectAll("text")
+	  .remove();
       }
       else {
 	// transition to view 2
-	that.newsibsg.selectAll("path").data(that.new_siblings).enter().append("path")
+	that.view = 2; 
+	that.gnewsib_paths.selectAll("path").data(that.new_siblings).enter().append("path")
 	  .call(addTooltip)
-	  .transition()
-	  .delay(5000)
-	  .attrTween("d", arcTween)
-	  .style("stroke", "#fff")
-	  .style("fill", function(d) {
-	    var name = d.name.charAt(0).toUpperCase() + d.name.slice(1);
-	    return color(name); });
+	  .call(style_newsib_paths);
 	
-	that.newsibsg.selectAll("text").data(that.new_siblings).enter().append("text")
-	  .attr("opacity", 0.1)
-	  .transition()
-	  .duration(5000)
-	  .attr("opacity", 1)
-	  .attrTween("transform",textTween)
-	  .call(textdraw);
+	that.gnewsib_texts.selectAll("text").data(that.new_siblings).enter().append("text")
+	  .call(style_newsib_texts)
+	  .call(textdraw)
+	  .text(function(d){ return d.size>minsize ? d.name: ""; });
 	
-	that.text
-	  .text(function(d) {
-	    if (d.depth == 2) {
-	      return "";}
-	    else {
-	      return d.size>minsize ? d.name: "";}
-	  });
+	// add new parent paths again
+	that.gnewrent_paths.selectAll("path").data(that.new_parents).enter().append("path")
+	  .call(addTooltip)
+      	  .call(style_newrent_paths);
 	
-	that.view = 2; }
+	// add new parent text again
+	that.gnewrent_texts.selectAll("text").data(that.new_parents).enter().append("text")
+	  .call(style_newrent_texts);
+	
+      }
+      // redraw text
+      that.text.data(that.existing_data)
+	.transition()
+	.duration(5000)
+	.attrTween("transform",textTween)
+	.call(textdraw);
     }     
   } // end of change function
 
