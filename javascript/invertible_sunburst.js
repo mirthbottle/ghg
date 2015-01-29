@@ -435,11 +435,11 @@ function inSun(root, width, minsize) {
 function selectFile(dataset){
   
   if (dataset == "source"){
-    var file = "demo_emissions.json";
+    var file = "/mydata/demo_emissions.json";
     var minsize = 300;
   }
   else{
-    var file = "demo_enduse.json";
+    var file = "/mydata/demo_enduse.json";
     var minsize = 70;
   }
   return [file, minsize];
