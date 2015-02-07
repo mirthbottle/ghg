@@ -438,6 +438,14 @@ function selectFile(dataset){
     var file = "/mydata/demo_emissions.json";
     var minsize = 300;
   }
+  else if (dataset == "scope1"){
+    var file = "/mydata/scope1countrysector.json";
+    var minsize = 50;
+  }
+  else if (dataset == "scope2"){
+    var file = "/mydata/scope2countrysector.json";
+    var minsize = 10;
+  }
   else{
     var file = "/mydata/demo_enduse.json";
     var minsize = 70;

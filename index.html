@@ -23,6 +23,8 @@
 	<div class="btn-group" style="margin:20px">
 	  <button id="source" class="btn btn-default btn-lg active" onclick="change_display('source')">Global 2011 Source Data</button>
 	  <button id="enduse" class="btn btn-default btn-lg" onclick="change_display('enduse')">US 2011 End Use Data</button>
+	  <button id="scope1" class="btn btn-default btn-lg" onclick="change_display('scope1')">Global Company 2013 Scope 1 Data Reported</button>
+	  <button id="scope2" class="btn btn-default btn-lg" onclick="change_display('scope2')">Global Company 2013 Scope2 Data Reported</button>
 	</div>
 	<button class="btn btn-default btn-lg" id="animate1">Switch Views</button>
       </div>
@@ -40,8 +42,7 @@
   </body>
   <script>
     var width = document.getElementById("midsection").offsetWidth;
-    // var file = "/mydata/demo_emissions.json";
-    var file = "/scope2countrysector.json";
+    var file = "/mydata/demo_emissions.json";
     var svg = d3.select("#chart").append("svg");
     var chart;
 
@@ -66,9 +67,8 @@
           d3.selectAll("#animate1, #animate2").on("click", chart.change);
         });
 
-        var other_dataset = dataset == "source" ? "enduse" : "source";
         document.getElementById(dataset).className = "btn btn-default btn-lg active";
-        document.getElementById(other_dataset).className = "btn btn-default btn-lg";
+        document.getElementById(current_dataset.value).className = "btn btn-default btn-lg";
         current_dataset.value = dataset;
       }
     }
