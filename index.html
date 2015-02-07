@@ -22,6 +22,8 @@
 	<div class="btn-group" style="margin:20px">
 	  <button id="source" class="btn btn-default btn-lg active" onclick="change_display('source')">Global 2011 Source Data</button>
 	  <button id="enduse" class="btn btn-default btn-lg" onclick="change_display('enduse')">US 2011 End Use Data</button>
+	  <button id="scope1" class="btn btn-default btn-lg" onclick="change_display('scope1')">Global Company 2013 Scope 1 Data Reported</button>
+	  <button id="scope2" class="btn btn-default btn-lg" onclick="change_display('scope2')">Global Company 2013 Scope2 Data Reported</button>
 	</div>
 	<button class="btn btn-default btn-lg" id="animate1">Switch Views</button>
       </div>
@@ -33,13 +35,15 @@
       <h2>US 2011 End Use Data is from</h2>
       <h4>Table 2-12: U.S. Greenhouse Gas Emissions Allocated to Economic Sectors (Tg CO2 Eq. and Percent of Total in 2011)</h4>
       <p>EPA, US GHG Inventory 2013: Chapter 2 Trends in Greenhouse Gas Emissions. Washington, DC: EPA. Available at: <a href="http://www.epa.gov/climatechange/Downloads/ghgemissions/US-GHG-Inventory-2013-Chapter-2-Trends.pdf">http://www.epa.gov/climatechange/Downloads/ghgemissions/US-GHG-Inventory-2013-Chapter-2-Trends.pdf</a></p>
-      
+      <h2>Global Company Data is from</h2>
+      <h4>CDP 2014</h4>
+      <p>Self-reported data for the fiscal year 2013 by public and private companies.  Available through an academic license to UC Berkeley</p>
       
     </div>
   </body>
   <script>
     var width = document.getElementById("midsection").offsetWidth;
-    var file = "demo_emissions.json";
+    var file = "/mydata/demo_emissions.json";
     var svg = d3.select("#chart").append("svg");
     var chart;
 
@@ -64,9 +68,8 @@
           d3.selectAll("#animate1, #animate2").on("click", chart.change);
         });
 
-        var other_dataset = dataset == "source" ? "enduse" : "source";
         document.getElementById(dataset).className = "btn btn-default btn-lg active";
-        document.getElementById(other_dataset).className = "btn btn-default btn-lg";
+        document.getElementById(current_dataset.value).className = "btn btn-default btn-lg";
         current_dataset.value = dataset;
       }
     }
