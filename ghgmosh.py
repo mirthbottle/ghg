@@ -26,9 +26,9 @@ def write_json(p, filename):
     return data
 
 
-# 2014 book
-# sheet 35 has scope 1 and scope 2 emissions totals per company
+# YR 2014 sheet 35 has scope 1 and scope 2 emissions totals per company
 # levels of verification, uncertainty, are available
+# YR 2013 sheet 34, pcols[17] is scope1 and pcols[18] is scope2
 
 def get_scope1or2(parsedsheet, scope):
     pcols = parsedsheet.columns.values
@@ -37,7 +37,8 @@ def get_scope1or2(parsedsheet, scope):
     elif (scope == 2):
         pscope = pcols[18]
     p = parsedsheet[[pcols[0]]+pcols[2:7].tolist()+pcols[14:17].tolist() +[pscope]]
-    p = p.rename(columns={pcols[17]:"Scope 1", pcols[18]:"Scope 2"}).fillna(0)
+    p = p.rename(columns={pcols[17]:"Scope 1", pcols[18]:"Scope 2"})
+    p = p.set_index(pcols[0])
     return p
 
 ## totals by country headquarters...
@@ -71,10 +72,34 @@ def get_scope1or2country(parsedsheet):
     p = parsedsheet[pcols[0:7].tolist()+pcols[16:18].tolist()]
     return p
 
-# sheet 68 has scope3 emissions by category per company
+# YR 2014 sheet 68 has scope3 emissions by category per company
 # col14 has category, col16 has total
+# YR 2013 sheet 65 has scope3 emissions, col14 and col16 have category and total
 
+# i think i need to put the categories in separate columns...  
 def get_scope3(parsedsheet):
     pcols = parsedsheet.columns.values
-    p = parsedsheet[pcols[0:7].tolist()+pcols[14:17].tolist()]
+    p = parsedsheet[pcols[0:7].tolist()+[pcols[14], pcols[16]]]
+    # delete all rows with col16 == NaN
+    p = p[p[pcols[16]].notnull()]
+    p = p.set_index(pcols[0])
     return p
+
+def combine_scopes(pscope1, pscope2, pscope3):
+    pcols = pscope3.columns.values
+    # drop duplicates by account number
+    has_scope1 = pscope1.drop_duplicates(pcols[1])
+    has_scope2 = pscope2.drop_duplicates(pcols[1])
+    has_scope3 = pscope3.drop_duplicates(pcols[1])
+    has_scope1['has Scope 1']  = True
+    has_scope2['has Scope 2']  = True
+    has_scope3['has Scope 3']  = True
+    p = has_scope1
+    p = p.join(has_scope2[['has Scope 2']], how="outer")
+    p = p.join(has_scope3[['has Scope 3']], how="outer")
+    p['has Scope 1'] = p['has Scope 1'].fillna(False)
+    p['has Scope 2'] = p['has Scope 2'].fillna(False)
+    p['has Scope 3'] = p['has Scope 3'].fillna(False)
+    p = p.drop(['Scope 1', 'Scope 2'], 1)
+    return p
+
