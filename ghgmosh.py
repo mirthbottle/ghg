@@ -26,18 +26,26 @@ def write_json(p, filename):
     return data
 
 
-# YR 2014 sheet 35 has scope 1 and scope 2 emissions totals per company
+# YR 2014 sheet 35
 # levels of verification, uncertainty, are available
-# YR 2013 sheet 34, pcols[17] is scope1 and pcols[18] is scope2
+# YR 2013 sheet 34
+# YR 2012 sheet 32
+# YR 2011 sheet 30
+# YR 2010 sheet 33 has scope 1, sheet 40 has scope 2
+# YR 2009 sheet 2
+scopecols = { 2014: {1:17, 2:18, 3:{'cat':14, 'amount':16}},
+              2013: {1:17, 2:18, 3:{'cat':14, 'amount':14}},
+              2012: {1:15, 2:19, 3:{'cat':12, 'amount':13}},
+              2011: {1:15, 2:19, 3:{'cat':12, 'amount':13}},
+              2010: {1:14, 2:14, 3:{'cat':12, 'amount':13}},
+              2009: {1:28, 2:44, 3:{'cat':12, 'amount':13}}}
 
-def get_scope1or2(parsedsheet, scope):
+def get_scope1or2(parsedsheet, scope, year):
     pcols = parsedsheet.columns.values
-    if (scope == 1):
-        pscope = pcols[17]
-    elif (scope == 2):
-        pscope = pcols[18]
-    p = parsedsheet[[pcols[0]]+pcols[2:7].tolist()+pcols[14:17].tolist() +[pscope]]
-    p = p.rename(columns={pcols[17]:"Scope 1", pcols[18]:"Scope 2"})
+    pscope = pcols[scopecols[year][scope]]
+    p = parsedsheet[[pcols[0]]+pcols[2:7].tolist()+[pscope]]
+    p = p.rename(columns={pcols[scopecols[year][1]]:"Scope 1",
+                          pcols[scopecols[year][2]]:"Scope 2"})
     p = p.set_index(pcols[0])
     return p
 
@@ -73,33 +81,47 @@ def get_scope1or2country(parsedsheet):
     return p
 
 # YR 2014 sheet 68 has scope3 emissions by category per company
-# col14 has category, col16 has total
-# YR 2013 sheet 65 has scope3 emissions, col14 and col16 have category and total
+# YR 2013 sheet 65 
+# YR 2012 sheet 69
+# YR 2011 sheet 67
+# YR 2010 sheet 49
+# YRs 2009 and older have different scope3 categories reported in separate columns
+# mixed blessing...
+# i use the organisation as the index, but they could differ by year
+# maybe i should use account to index
+# YRs 2009 and older don't have account numbers
 
 # i think i need to put the categories in separate columns...  
-def get_scope3(parsedsheet):
+def get_scope3(parsedsheet, year):
     pcols = parsedsheet.columns.values
-    p = parsedsheet[pcols[0:7].tolist()+[pcols[14], pcols[16]]]
-    # delete all rows with col16 == NaN
-    p = p[p[pcols[16]].notnull()]
+    catcol = pcols[scopecols[year][3]["cat"]]
+    amtcol = pcols[scopecols[year][3]["amount"]]
+    p = parsedsheet[pcols[0:7].tolist()+[catcol, amtcol]]
+    # delete all rows with amount == NaN
+    p = p[p[amtcol].notnull()]
     p = p.set_index(pcols[0])
     return p
 
-def combine_scopes(pscope1, pscope2, pscope3):
-    pcols = pscope3.columns.values
+def combine_scopes(pscope1, pscope2, pscope3=None):
     # drop duplicates by account number
-    has_scope1 = pscope1.drop_duplicates(pcols[1])
-    has_scope2 = pscope2.drop_duplicates(pcols[1])
-    has_scope3 = pscope3.drop_duplicates(pcols[1])
+    has_scope1 = drop_dups(pscope1)
+    has_scope2 = drop_dups(pscope2)
     has_scope1['has Scope 1']  = True
-    has_scope2['has Scope 2']  = True
-    has_scope3['has Scope 3']  = True
+    has_scope2['has Scope 2']  = True 
     p = has_scope1
     p = p.join(has_scope2[['has Scope 2']], how="outer")
-    p = p.join(has_scope3[['has Scope 3']], how="outer")
     p['has Scope 1'] = p['has Scope 1'].fillna(False)
     p['has Scope 2'] = p['has Scope 2'].fillna(False)
-    p['has Scope 3'] = p['has Scope 3'].fillna(False)
-    p = p.drop(['Scope 1', 'Scope 2'], 1)
+    p = p.drop(['Scope 1'], 1)
+    if pscope3:
+        has_scope3 = drop_dups(pscope3)
+        has_scope3['has Scope 3']  = True
+        p = p.join(has_scope3[['has Scope 3']], how="outer")
+        p['has Scope 3'] = p['has Scope 3'].fillna(False)
     return p
 
+def drop_dups(p):
+    p["index"] = p.index
+    p = p.drop_duplicates("index")
+    p = p.drop("index", 1)
+    return p
