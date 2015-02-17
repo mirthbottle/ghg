@@ -435,19 +435,19 @@ function inSun(root, width, minsize) {
 function selectFile(dataset){
   
   if (dataset == "source"){
-    var file = "/mydata/demo_emissions.json";
+    var file = "/ghg/mydata/demo_emissions.json";
     var minsize = 300;
   }
   else if (dataset == "scope1"){
-    var file = "/mydata/scope1countrysector.json";
+    var file = "/ghg/mydata/scope1countrysector.json";
     var minsize = 50;
   }
   else if (dataset == "scope2"){
-    var file = "/mydata/scope2countrysector.json";
+    var file = "/ghg/mydata/scope2countrysector.json";
     var minsize = 10;
   }
   else{
-    var file = "/mydata/demo_enduse.json";
+    var file = "/ghg/mydata/demo_enduse.json";
     var minsize = 70;
   }
   return [file, minsize];
