@@ -43,9 +43,11 @@ scopecols = { 2014: {1:17, 2:18, 3:{'cat':14, 'amount':16}},
 def get_scope1or2(parsedsheet, scope, year):
     pcols = parsedsheet.columns.values
     pscope = pcols[scopecols[year][scope]]
+    newname = "Scope 1" if scope == 1 else "Scope 2"
     p = parsedsheet[[pcols[0]]+pcols[2:7].tolist()+[pscope]]
-    p = p.rename(columns={pcols[scopecols[year][1]]:"Scope 1",
-                          pcols[scopecols[year][2]]:"Scope 2"})
+    p = p.rename(columns={pscope:newname})
+    # delete all rows with amount == NaN
+    p = p[p[newname].notnull()]
     p = p.set_index(pcols[0])
     return p
 
