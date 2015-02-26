@@ -1,22 +1,23 @@
 import pandas as pd
 
-# 2014 - sheet 12
+# 2014 - sheet 12, col14 
 # 2013 - sheet 10, col14
 
-colname = {2014: 'CC3.1. Did you have an emissions reduction target that was active (ongoing or reached completion) in the reporting year?',
-           2013: '3.1. Did you have an emissions reduction target that was active (ongoing or reached completion) in the reporting year?'}
+goalcols = { 2014: 14, 2013: 14 }
 
-def get_vcounts(parsedsheet, year):
-    return parsedsheet[colname[year]].value_counts()
+def get_vcounts(p, year):
+    pcols = p.columns.values
+    return p[pcols[goalcols[2014]]].value_counts()
 
-def summary(vcounts, parsedsheet):
+def summary(vcounts, p):
     # stats about emissions targets in 2014
     # generate for every year
-    
+
     hasintensity = vcounts['Intensity target'] + 350
     hasabs = vcounts['Absolute target'] + 350
-    neg = len(parsedsheet) - vcounts.values.sum() + vcounts['No']
-    return {"total":len(parsedsheet),
+    neg = len(p) - vcounts.values.sum() + vcounts['No']
+    return {"total":len(p),
             "neg":neg,
             "intensity":hasintensity,
             "absolute":hasabs}
+
