@@ -28,7 +28,7 @@ def write_json(p, filename):
 
 # YR 2014 sheet 35
 # levels of verification, uncertainty, are available
-# YR 2013 sheet 34
+# YR 2013 sheet 33
 # YR 2012 sheet 32
 # YR 2011 sheet 30
 # YR 2010 sheet 33 has scope 1, sheet 40 has scope 2
@@ -135,3 +135,29 @@ def add_yearindex(p, year):
     p['year'] = year
     p.set_index('year', append=True, inplace=True)
     return p
+
+
+def compute_percent_changes(p, colname):
+    companies = p.index.levels[0].tolist()
+    pieces = []
+    for c in companies:
+        try:
+            f = p.loc[c]
+            f = percent_change(f, colname)
+            f["ISIN"] = c
+            pieces.append(f)
+        except Exception:
+            print c
+            pass
+    newp = pd.concat(pieces).reset_index().set_index(["ISIN", "year"])
+    return newp
+
+# compute annual percent change...
+def percent_change(f, colname):
+    newcolname = "percent change " + colname
+    f[newcolname] = 0
+    yearswithdata = f.index.tolist()
+    for i in range(2011, 2015):
+        if i in yearswithdata and i-1 in yearswithdata:
+            f.loc[i, newcolname] = 1 - f.loc[i,colname]/f.loc[i-1,colname]
+    return f

@@ -9,7 +9,7 @@ import pandas as pd
 goalcols = { 2014: 14, 2013: 14, 2012: 12, 2011: 12, 2010: 12 }
 
 def get_targets(p, year):
-    # years 2010 and 2011 don't have ISIN, boooo
+    # years 2010 and 2011 and 2012 don't have ISIN, boooo
     pcols = p.columns.values
     targets = p[p["Organisation"].notnull()][["Organisation",pcols[goalcols[year]]]]
     targets.rename(columns = {pcols[goalcols[year]]: "target type"}, inplace=True)
@@ -34,3 +34,24 @@ def summary(vcounts, p):
             "intensity":hasintensity,
             "absolute":hasabs}
 
+def get_companies_by_target(p):
+    # get by levels[0] should be ISIN
+    companies = p.index.levels[0].tolist()
+    pieces_targets = []
+    pieces_none = []
+    for c in companies:
+        try:
+            f = p.loc[c]
+            fhas_target = f[f["has target"]]
+            f["ISIN"] = c
+            yearswithtarget = fhas_target.index.tolist()
+            if len(yearswithtarget) > 2:
+                pieces_targets.append(f)
+            else:
+                pieces_none.append(f)
+        except Exception:
+            print c
+            pass
+    ptargets = pd.concat(pieces_targets).reset_index().set_index(["ISIN", "year"])
+    pnotargets = pd.concat(pieces_none).reset_index().set_index(["ISIN", "year"])
+    return ptargets, pnotargets
