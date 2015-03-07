@@ -2,6 +2,7 @@ import pandas as pd
 import json
 
 # CDPdata
+# 2014 sheet 43 has Scope 1 data breakdown by country
 
 def write_json(p, filename):
     index1s = p.index.levels[0]
