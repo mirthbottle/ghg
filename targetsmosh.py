@@ -76,7 +76,7 @@ def get_hadtarget(targetorgs, target_col):
 # Scope 1 and 2 emissions, and orginfos
 def get_targetorgs(to):
     to = to.reset_index().set_index("ISIN")
-    to = to[['year','GICS Industry', 
+    to = to[['year','Country', 'GICS Industry', 
              'has target', 'has absolute', 
              'has intensity', 
              'percent change 1and2 intensity',
