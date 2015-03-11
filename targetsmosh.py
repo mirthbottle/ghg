@@ -67,7 +67,18 @@ def get_hadtarget(targetorgs, target_col):
         g_series = np.array(g[target_col].tolist())
         g_series = g_series[:-1]
         g = g[1:]
-        g[target_col + 'last year'] = g_series
+        g[target_col + ' last year'] = g_series
         pieces.append(g)
     new_to = pd.concat(pieces).reset_index().set_index("ISIN")
     return new_to
+
+# targetorgs is the join of the table of targets,
+# Scope 1 and 2 emissions, and orginfos
+def get_targetorgs(to):
+    to = to.reset_index().set_index("ISIN")
+    to = to[['year','GICS Industry', 
+             'has target', 'has absolute', 
+             'has intensity', 
+             'percent change 1and2 intensity',
+             'percent change 1and2 total']]
+    return to
