@@ -57,17 +57,24 @@ def get_companies_by_target(p):
     pnotargets = pd.concat(pieces_none).reset_index().set_index(["ISIN", "year"])
     return ptargets, pnotargets
 
-def get_hadtarget(targetorgs, target_col):
+def get_hadtarget(targetorgs):
     # shift had target
     to_gs = targetorgs.groupby(level=0)
     companies = to_gs.indices.keys()
     pieces = []
     for c in companies:
         g = to_gs.get_group(c)
-        g_series = np.array(g[target_col].tolist())
-        g_series = g_series[:-1]
+        g_tseries = np.array(g["has target"].tolist())
+        g_aseries = np.array(g["has absolute"].tolist())
+        g_iseries = np.array(g["has intensity"].tolist())
+        g_tseries = g_tseries[:-1]
+        g_aseries = g_aseries[:-1]
+        g_iseries = g_iseries[:-1]
         g = g[1:]
-        g[target_col + ' last year'] = g_series
+        g['had target last year'] = g_tseries
+        g['had absolute last year'] = g_aseries
+        g['had intensity last year'] = g_iseries
+        g["ISIN"] = c
         pieces.append(g)
     new_to = pd.concat(pieces).reset_index().set_index("ISIN")
     return new_to
@@ -82,3 +89,4 @@ def get_targetorgs(to):
              'percent change 1and2 intensity',
              'percent change 1and2 total']]
     return to
+

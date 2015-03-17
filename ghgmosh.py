@@ -2,6 +2,7 @@ import pandas as pd
 import json
 
 # CDPdata
+# emissions in tons CO2e
 # 2014 sheet 43 has Scope 1 data breakdown by country
 
 def write_json(p, filename):
@@ -162,3 +163,4 @@ def percent_change(f, colname):
         if i in yearswithdata and i-1 in yearswithdata:
             f.loc[i, newcolname] = 1 - f.loc[i,colname]/f.loc[i-1,colname]
     return f
+
