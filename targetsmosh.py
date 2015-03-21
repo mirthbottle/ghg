@@ -9,6 +9,7 @@ import numpy as np
 
 goalcols = { 2014: 14, 2013: 14, 2012: 12, 2011: 12, 2010: 12 }
 
+
 def get_targets(p, year):
     # years 2010 and 2011 and 2012 don't have ISIN, boooo
     pcols = p.columns.values
@@ -74,7 +75,7 @@ def get_hadtarget(targetorgs):
         g['had target last year'] = g_tseries
         g['had absolute last year'] = g_aseries
         g['had intensity last year'] = g_iseries
-        g["ISIN"] = c
+        # g["ISIN"] = c
         pieces.append(g)
     new_to = pd.concat(pieces).reset_index().set_index("ISIN")
     return new_to
@@ -83,10 +84,57 @@ def get_hadtarget(targetorgs):
 # Scope 1 and 2 emissions, and orginfos
 def get_targetorgs(to):
     to = to.reset_index().set_index("ISIN")
-    to = to[['year','Country', 'GICS Industry', 
+    to = to[['year','Country', 'GICS Sector',
+             'GICS Industry Group', 'GICS Industry',
+             'cogs', 'revt', 
              'has target', 'has absolute', 
-             'has intensity', 
+             'has intensity',
+             'Scope 1', 'Scope 2',
+             '1and2 total', '1and2 intensity', 
              'percent change 1and2 intensity',
              'percent change 1and2 total']]
     return to
 
+# target details
+deets = { 2014: { 'abs info': 
+                  { 'sheet': 13, 'scope': 15, 'target': 17,
+                    'base year': 18, 'base ghg': 19,
+                    'target year': 20},
+                  'int info':
+                  { 'sheet': 14, 'scope': 15, 'target': 17,
+                    'metric': 18,
+                    'base year': 19, 'base ghg int': 20,
+                    'target year': 21},
+                  'progress':
+                  { 'sheet': 16, 'target id': 14},
+                  'initiatives':
+                  { 'sheet': 18, 'type': 14,
+                    'monetary savings': 17, 'monetary cost': 18 }
+              },
+          2013: { 'abs info':
+                  { 'sheet': 11, 'scope': 15, 'target': 17,
+                    'base year': 18, 'base ghg': 19,
+                    'target year': 20 },
+                  'int info': 
+                  { 'sheet': 12, 'scope': 15, 'target': 17,
+                    'metric': 18,
+                    'base year': 19, 'base ghg int': 20,
+                    'target year': 21},
+                  'progress': { 'sheet': 14 },
+                  'initiatives': { 'sheet': 16, 'type': 14 }
+              },
+          2012: { 'abs info':
+                  { 'sheet': 11, 'scope': 13, 'target': 15,
+                    'base year': 16, 'base ghg': 17,
+                    'target year': 18 },
+                  'int info':
+                  { 'sheet': 12, 'scope' 13, 'target': 15,
+                    'metric': 16, 'base year': 17, 'base ghg int': 18,
+                    'target year': 19 },
+                  'progress': { 'sheet': 14 },
+                  'initiatives': { 'sheet': 16, 'type': 12 }
+              }
+      }
+
+
+# scopes need cleaning...
