@@ -128,7 +128,7 @@ deets = { 2014: { 'abs info':
                     'base year': 16, 'base ghg': 17,
                     'target year': 18 },
                   'int info':
-                  { 'sheet': 12, 'scope' 13, 'target': 15,
+                  { 'sheet': 12, 'scope': 13, 'target': 15,
                     'metric': 16, 'base year': 17, 'base ghg int': 18,
                     'target year': 19 },
                   'progress': { 'sheet': 14 },
