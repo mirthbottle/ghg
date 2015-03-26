@@ -20,3 +20,33 @@ def scatter_groups(xyvalues, fname, title, xlabel, ylabel):
                       legend ="top_left", tools=TOOLS,
                       xlabel=xlabel, ylabel=ylabel) 
     return scatter
+
+
+def stacked_cols(df, categories):
+    # where data for a category is in a separate column
+    areas = OrderedDict()
+    last = np.zeros(len(df[categories[0]]))
+    for cat in categories:
+        next = last + df[cat]
+        areas[cat] = np.hstack((last[::-1], next))
+        last = next
+    return areas
+
+def separate_cats(df, catcol, categories, valcol):
+    # data for dategories are in one column
+    # need to extract them into dataframe columns
+    isnew = True
+    newdf = 0
+    for cat in categories:
+        if isnew:
+            newdf = df[df[catcol]==cat][[valcol]]
+            isnew = False
+        else:
+            newdf = newdf.join(df[df[catcol]==cat][[valcol]], how="outer")
+        newdf.rename(columns={valcol: cat}, inplace = True)
+    return newdf
+
+#     bvalues = OrderedDict()
+#     last = np.zeros(len(df[df[catcol] == categories[0]]))
+#     for cat in categories:
+#         next = last + df[df[catcol]==cat][valcol]

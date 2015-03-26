@@ -2,6 +2,8 @@ import pandas as pd
 import json
 
 # CDPdata
+
+# starting 2012, GICS Sector Banks was renamed to Financials, ughh
 # emissions in tons CO2e
 # 2014 sheet 43 has Scope 1 data breakdown by country
 
@@ -35,17 +37,24 @@ def write_json(p, filename):
 # YR 2011 sheet 30
 # YR 2010 sheet 33 has scope 1, sheet 40 has scope 2
 # YR 2009 sheet 2
-scopecols = { 2014: {1:17, 2:18, 3:{'cat':14, 'amount':16}},
-              2013: {1:17, 2:18, 3:{'cat':14, 'amount':16}},
-              2012: {1:15, 2:19, 3:{'cat':12, 'amount':13}},
-              2011: {1:15, 2:19, 3:{'cat':12, 'amount':13}},
-              2010: {1:14, 2:14, 3:{'cat':12, 'amount':13}},
-              2009: {1:28, 2:44, 3:{'cat':12, 'amount':13}}}
+scopecols = { 2014: {"sheet": 35, 1:17, 2:18, 3:{'cat':14, 'amount':16}},
+              2013: {"sheet": 33, 1:17, 2:18, 3:{'cat':14, 'amount':16}},
+              2012: {"sheet": 32, 1:15, 2:19, 3:{'cat':12, 'amount':13}},
+              2011: {"sheet": 30, 1:15, 2:19, 3:{'cat':12, 'amount':13}},
+              2010: {"sheets": {1: 33, 2: 40},
+                     1:14, 2:14, 3:{'cat':12, 'amount':13}},
+              2009: {"sheet": 2, 1:28, 2:44, 3:{'cat':12, 'amount':13}}}
 
-def get_scope1or2(parsedsheet, scope, year):
+def get_scope1or2(scope, year):
+    if "sheet" in scopecols[year].keys():
+        sheetnum = scopecols[year]["sheet"]
+    else:
+        sheetnum = scopecols[year]["sheets"][scope]
+    filename = "../CDPdata/sheet"+ str(sheetnum) + "_" + str(year)+".pkl"
+    parsedsheet = pd.read_pickle(filename)
     pcols = parsedsheet.columns.values
     pscope = pcols[scopecols[year][scope]]
-    newname = "Scope 1" if scope == 1 else "Scope 2"
+    newname = "scope" + str(scope)
     p = parsedsheet[[pcols[0]]+pcols[2:7].tolist()+[pscope]]
     p = p.rename(columns={pscope:newname})
     # delete all rows with amount == NaN
