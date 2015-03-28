@@ -1,5 +1,6 @@
 import pandas as pd
 import json
+import datetime as dt
 
 # CDPdata
 
@@ -55,12 +56,21 @@ def get_scope1or2(scope, year):
     pcols = parsedsheet.columns.values
     pscope = pcols[scopecols[year][scope]]
     newname = "scope" + str(scope)
-    p = parsedsheet[[pcols[0]]+pcols[2:7].tolist()+[pscope]]
+    p = parsedsheet[[pcols[0]]+pcols[2:7].tolist()+
+                    ['Reporting Period\nFrom', 'Reporting Period\nTo']+
+                    [pscope]]
     p = p.rename(columns={pscope:newname})
     # delete all rows with amount == NaN
     p = p[p[newname].notnull()]
     p = p.set_index(pcols[0])
     return p
+
+def get_yrsdata(p, yr):
+    ## use to column because the difference is always one year
+    ## 2014, june 30 2013 to july 1 2014
+    pyr = p[(p["reporting period to"] < dt.date(yr,6,30)) &
+            (p["reporting period to"] > dt.date(yr-1, 7,1))]
+    return pyr
 
 ## totals by country headquarters...
 ## and GICS Sector or GICS Industry Group
