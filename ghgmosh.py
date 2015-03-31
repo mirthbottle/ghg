@@ -6,6 +6,7 @@ import datetime as dt
 
 # starting 2012, GICS Sector Banks was renamed to Financials, ughh
 # emissions in tons CO2e
+# year 2010, 2011, and 2012 doesn't have isins, only organisation and ticker
 # 2014 sheet 43 has Scope 1 data breakdown by country
 
 def write_json(p, filename):
@@ -125,25 +126,6 @@ def get_scope3(parsedsheet, year):
     p = p.set_index(pcols[0])
     return p
 
-def combine_scopes(pscope1, pscope2, pscope3=None):
-    # drop duplicates by account number
-    has_scope1 = drop_dups(pscope1)
-    has_scope2 = drop_dups(pscope2)
-    has_scope1['has Scope 1']  = True
-    has_scope2['has Scope 2']  = True 
-    p = has_scope1
-    p = p.join(has_scope2[['has Scope 2']], how="outer")
-    p = p.drop(['Scope 1'], 1)
-    if pscope3 is None:
-        pass
-    else:
-        has_scope3 = drop_dups(pscope3)
-        has_scope3['has Scope 3']  = True
-        p = p.join(has_scope3[['has Scope 3']], how="outer")
-        p['has Scope 3'] = p['has Scope 3'].fillna(False)
-    p['has Scope 1'] = p['has Scope 1'].fillna(False)
-    p['has Scope 2'] = p['has Scope 2'].fillna(False)
-    return p
 
 def drop_dups(p):
     name = p.index.name

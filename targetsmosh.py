@@ -1,20 +1,12 @@
 import pandas as pd
 import numpy as np
 
-# 2014 - sheet 12, col14 
-# 2013 - sheet 10, col14
-# 2012 - sheet 10, col12
-# 2011 - sheet 9, col12
-# 2010 - sheet 23, col12
-
-goalcols = { 2014: 14, 2013: 14, 2012: 12, 2011: 12, 2010: 12 }
-
-
 def get_targets(p, year):
     # years 2010 and 2011 and 2012 don't have ISIN, boooo
     pcols = p.columns.values
-    targets = p[p["Organisation"].notnull()][["Organisation",pcols[goalcols[year]]]]
-    targets.rename(columns = {pcols[goalcols[year]]: "target type"}, inplace=True)
+    ttypes_col = deets[year]["summary"]["ttypes"]
+    targets = p[p["Organisation"].notnull()][["Organisation",pcols[ttypes_col]]]
+    targets.rename(columns = {pcols[ttypes_col]: "target type"}, inplace=True)
     targets["year"] = year
     targets["has absolute"] = targets["target type"].apply(lambda x: "solute" in unicode(x).encode('utf-8'))
     targets["has intensity"] = targets["target type"].apply(lambda x: "ntensity" in unicode(x).encode('utf-8'))
@@ -95,8 +87,12 @@ def get_targetorgs(to):
              'percent change 1and2 total']]
     return to
 
+
+goalcols = { 2014: 14, 2013: 14, 2012: 12, 2011: 12, 2010: 12 }
+
 # target details
-deets = { 2014: { 'abs info': 
+deets = { 2014: { 'summary': { 'sheet': 12, 'ttypes': 14 },
+                  'abs info': 
                   { 'sheet': 13, 'scope': 15, 'target': 17,
                     'base year': 18, 'base ghg': 19,
                     'target year': 20},
@@ -108,10 +104,11 @@ deets = { 2014: { 'abs info':
                   'progress':
                   { 'sheet': 16, 'target id': 14},
                   'initiatives':
-                  { 'sheet': 18, 'type': 14,
+                  { 'sheet': 18, 'itype': 14,
                     'monetary savings': 17, 'monetary cost': 18 }
               },
-          2013: { 'abs info':
+          2013: { 'summary': { 'sheet': 10, 'ttypes': 14 },
+                  'abs info':
                   { 'sheet': 11, 'scope': 15, 'target': 17,
                     'base year': 18, 'base ghg': 19,
                     'target year': 20 },
@@ -121,9 +118,10 @@ deets = { 2014: { 'abs info':
                     'base year': 19, 'base ghg int': 20,
                     'target year': 21},
                   'progress': { 'sheet': 14 },
-                  'initiatives': { 'sheet': 16, 'type': 14 }
+                  'initiatives': { 'sheet': 16, 'itype': 14 }
               },
-          2012: { 'abs info':
+          2012: { 'summary': { 'sheet': 10, 'ttypes': 12 },
+                  'abs info':
                   { 'sheet': 11, 'scope': 13, 'target': 15,
                     'base year': 16, 'base ghg': 17,
                     'target year': 18 },
@@ -132,7 +130,19 @@ deets = { 2014: { 'abs info':
                     'metric': 16, 'base year': 17, 'base ghg int': 18,
                     'target year': 19 },
                   'progress': { 'sheet': 14 },
-                  'initiatives': { 'sheet': 16, 'type': 12 }
+                  'initiatives': { 'sheet': 16, 'itype': 12 }
+              },
+          2011: { 'summary': { 'sheet': 9, 'ttypes': 12 },
+                  'abs info': {},
+                  'int info': {},
+                  'progress': {},
+                  'initiatives': {}
+              },
+          2010: { 'summary': { 'sheet': 23, 'ttypes': 12 },
+                  'abs info': {},
+                  'int info': {},
+                  'progress': {},
+                  'initiatives': {}
               }
       }
 
