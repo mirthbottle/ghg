@@ -147,12 +147,12 @@ def compute_percent_changes(p, colname):
         try:
             f = p.loc[c]
             f = percent_change(f, colname)
-            f["ISIN"] = c
+            f["Organisation"] = c
             pieces.append(f)
         except Exception:
             print c
             pass
-    newp = pd.concat(pieces).reset_index().set_index(["ISIN", "year"])
+    newp = pd.concat(pieces).reset_index().set_index(["Organisation", "year"])
     return newp
 
 # compute annual percent change...
