@@ -52,6 +52,7 @@ def get_companies_by_target(p):
 
 def get_hadtarget(targetorgs):
     # shift had target
+    # targetorgs index is ["Organisation", "year"]
     to_gs = targetorgs.groupby(level=0)
     companies = to_gs.indices.keys()
     pieces = []
@@ -69,7 +70,7 @@ def get_hadtarget(targetorgs):
         g['had intensity last year'] = g_iseries
         # g["ISIN"] = c
         pieces.append(g)
-    new_to = pd.concat(pieces).reset_index().set_index("ISIN")
+    new_to = pd.concat(pieces).reset_index().set_index("Organisation")
     return new_to
 
 # targetorgs is the join of the table of targets,

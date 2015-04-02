@@ -46,7 +46,7 @@ def separate_cats(df, catcol, categories, valcol):
         newdf.rename(columns={valcol: cat}, inplace = True)
     return newdf
 
-#     bvalues = OrderedDict()
-#     last = np.zeros(len(df[df[catcol] == categories[0]]))
-#     for cat in categories:
-#         next = last + df[df[catcol]==cat][valcol]
+def prep_forhist(p, colname, low, high):
+    prepped = p[(p[colname].isnull()==False) &
+                (p[colname]<high) & (p[colname]>low)]
+    return prepped
