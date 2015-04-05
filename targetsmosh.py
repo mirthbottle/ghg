@@ -7,7 +7,7 @@ def get_targets(p, year):
     ttypes_col = deets[year]["summary"]["ttypes"]
     targets = p[p["Organisation"].notnull()][["Organisation",pcols[ttypes_col]]]
     targets.rename(columns = {pcols[ttypes_col]: "target type"}, inplace=True)
-    targets["year"] = year
+    targets["year"] = year - 1
     targets["has absolute"] = targets["target type"].apply(lambda x: "solute" in unicode(x).encode('utf-8'))
     targets["has intensity"] = targets["target type"].apply(lambda x: "ntensity" in unicode(x).encode('utf-8'))
     return targets

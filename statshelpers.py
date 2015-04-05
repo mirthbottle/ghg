@@ -4,9 +4,11 @@ import numpy as np
 def getvars(p, colname):
     # p is the data for a given year
     p_s = p[colname]
-    v = p_s.var
-    p["var"+ colname] = v.im_self
+    v = p_s.std()
+    m = p_s.mean()
+    p["t"+ colname] = (p_s - m)/ v
     return p
 
-def getextremes(p, colname):
-    return p[abs(p[colname])>1.5]
+def getextremes(p, colname, threshold):
+    # threshold in number of standard devs
+    return p[abs(p[colname])> threshold]

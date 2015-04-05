@@ -68,9 +68,9 @@ def get_scope1or2(scope, year):
 
 def get_yrsdata(p, yr):
     ## use to column because the difference is always one year
-    ## 2014, june 30 2013 to july 1 2014
-    pyr = p[(p["reporting period to"] < dt.date(yr,6,30)) &
-            (p["reporting period to"] > dt.date(yr-1, 7,1))]
+    ## 2013, june 30 2013 to july 1 2014
+    pyr = p[(p["reporting period to"] < dt.date(yr+1,6,30)) &
+            (p["reporting period to"] > dt.date(yr, 7,1))]
     return pyr
 
 ## totals by country headquarters...
@@ -160,8 +160,16 @@ def percent_change(f, colname):
     newcolname = "percent change " + colname
     f[newcolname] = 0
     yearswithdata = f.index.tolist()
-    for i in range(2011, 2015):
+    for i in range(2010, 2014):
         if i in yearswithdata and i-1 in yearswithdata:
             f.loc[i, newcolname] = 1 - f.loc[i,colname]/f.loc[i-1,colname]
     return f
 
+###### separate out companies with different emissions profiles
+
+## # get companies that overall reduced emissions by 2014, and separate them into systemic vs large emissions reductions
+
+## identify plateaus 
+# yr 1 emissions reduction, <.5 std? or <5%  guess it depends what the std is
+# yr 2, no reduction
+# yr 3, no reduction
