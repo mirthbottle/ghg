@@ -1,7 +1,12 @@
 import pandas as pd
 import json
+import datetime as dt
 
 # CDPdata
+
+# starting 2012, GICS Sector Banks was renamed to Financials, ughh
+# emissions in tons CO2e
+# year 2010, 2011, and 2012 doesn't have isins, only organisation and ticker
 # 2014 sheet 43 has Scope 1 data breakdown by country
 
 def write_json(p, filename):
@@ -34,23 +39,39 @@ def write_json(p, filename):
 # YR 2011 sheet 30
 # YR 2010 sheet 33 has scope 1, sheet 40 has scope 2
 # YR 2009 sheet 2
-scopecols = { 2014: {1:17, 2:18, 3:{'cat':14, 'amount':16}},
-              2013: {1:17, 2:18, 3:{'cat':14, 'amount':16}},
-              2012: {1:15, 2:19, 3:{'cat':12, 'amount':13}},
-              2011: {1:15, 2:19, 3:{'cat':12, 'amount':13}},
-              2010: {1:14, 2:14, 3:{'cat':12, 'amount':13}},
-              2009: {1:28, 2:44, 3:{'cat':12, 'amount':13}}}
+scopecols = { 2014: {"sheet": 35, 1:17, 2:18, 3:{'cat':14, 'amount':16}},
+              2013: {"sheet": 33, 1:17, 2:18, 3:{'cat':14, 'amount':16}},
+              2012: {"sheet": 32, 1:15, 2:19, 3:{'cat':12, 'amount':13}},
+              2011: {"sheet": 30, 1:15, 2:19, 3:{'cat':12, 'amount':13}},
+              2010: {"sheets": {1: 33, 2: 40},
+                     1:14, 2:14, 3:{'cat':12, 'amount':13}},
+              2009: {"sheet": 2, 1:28, 2:44, 3:{'cat':12, 'amount':13}}}
 
-def get_scope1or2(parsedsheet, scope, year):
+def get_scope1or2(scope, year):
+    if "sheet" in scopecols[year].keys():
+        sheetnum = scopecols[year]["sheet"]
+    else:
+        sheetnum = scopecols[year]["sheets"][scope]
+    filename = "../CDPdata/sheet"+ str(sheetnum) + "_" + str(year)+".pkl"
+    parsedsheet = pd.read_pickle(filename)
     pcols = parsedsheet.columns.values
     pscope = pcols[scopecols[year][scope]]
-    newname = "Scope 1" if scope == 1 else "Scope 2"
-    p = parsedsheet[[pcols[0]]+pcols[2:7].tolist()+[pscope]]
+    newname = "scope" + str(scope)
+    p = parsedsheet[[pcols[0]]+pcols[2:7].tolist()+
+                    ['Reporting Period\nFrom', 'Reporting Period\nTo']+
+                    [pscope]]
     p = p.rename(columns={pscope:newname})
     # delete all rows with amount == NaN
     p = p[p[newname].notnull()]
     p = p.set_index(pcols[0])
     return p
+
+def get_yrsdata(p, yr):
+    ## use to column because the difference is always one year
+    ## 2013, june 30 2013 to july 1 2014
+    pyr = p[(p["reporting period to"] < dt.date(yr+1,6,30)) &
+            (p["reporting period to"] > dt.date(yr, 7,1))]
+    return pyr
 
 ## totals by country headquarters...
 ## and GICS Sector or GICS Industry Group
@@ -105,25 +126,6 @@ def get_scope3(parsedsheet, year):
     p = p.set_index(pcols[0])
     return p
 
-def combine_scopes(pscope1, pscope2, pscope3=None):
-    # drop duplicates by account number
-    has_scope1 = drop_dups(pscope1)
-    has_scope2 = drop_dups(pscope2)
-    has_scope1['has Scope 1']  = True
-    has_scope2['has Scope 2']  = True 
-    p = has_scope1
-    p = p.join(has_scope2[['has Scope 2']], how="outer")
-    p = p.drop(['Scope 1'], 1)
-    if pscope3 is None:
-        pass
-    else:
-        has_scope3 = drop_dups(pscope3)
-        has_scope3['has Scope 3']  = True
-        p = p.join(has_scope3[['has Scope 3']], how="outer")
-        p['has Scope 3'] = p['has Scope 3'].fillna(False)
-    p['has Scope 1'] = p['has Scope 1'].fillna(False)
-    p['has Scope 2'] = p['has Scope 2'].fillna(False)
-    return p
 
 def drop_dups(p):
     name = p.index.name
@@ -145,12 +147,12 @@ def compute_percent_changes(p, colname):
         try:
             f = p.loc[c]
             f = percent_change(f, colname)
-            f["ISIN"] = c
+            f["Organisation"] = c
             pieces.append(f)
         except Exception:
             print c
             pass
-    newp = pd.concat(pieces).reset_index().set_index(["ISIN", "year"])
+    newp = pd.concat(pieces).reset_index().set_index(["Organisation", "year"])
     return newp
 
 # compute annual percent change...
@@ -158,7 +160,16 @@ def percent_change(f, colname):
     newcolname = "percent change " + colname
     f[newcolname] = 0
     yearswithdata = f.index.tolist()
-    for i in range(2011, 2015):
+    for i in range(2010, 2014):
         if i in yearswithdata and i-1 in yearswithdata:
             f.loc[i, newcolname] = 1 - f.loc[i,colname]/f.loc[i-1,colname]
     return f
+
+###### separate out companies with different emissions profiles
+
+## # get companies that overall reduced emissions by 2014, and separate them into systemic vs large emissions reductions
+
+## identify plateaus 
+# yr 1 emissions reduction, <.5 std? or <5%  guess it depends what the std is
+# yr 2, no reduction
+# yr 3, no reduction
