@@ -12,3 +12,13 @@ def getvars(p, colname):
 def getextremes(p, colname, threshold):
     # threshold in number of standard devs
     return p[abs(p[colname])> threshold]
+
+def ols_everyear(p, model, filename):
+    result={}
+    for yr in range(2010,2014):
+        result[yr] = smf.ols(formula=model, data=p.loc[yr]).fit()
+        f = open("../CDPdata/" + filename + str(yr) + ".txt", 'w')
+        f.write(model)
+        f.write(result[yr].summary().as_text())
+        f.close()
+    return result
