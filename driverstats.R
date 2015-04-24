@@ -1,6 +1,7 @@
 library(plm)
 
 gfti = read.csv("../CDPdata/gfti.csv")
+gfti.low = read.csv("../CDPdata/gfti_low.csv")
 
 #################################
 # effect of targets
@@ -14,7 +15,7 @@ icshasint2 <- plm(pc1and2intensity~Country+Sector:hasintensity,data=gfti, model=
 #-------------------------------
 icscogs <- plm(pc1and2intensity~Country+Sector+pCOGS, data=gfti, model="pooling")
 # sector specific effects of pCOGS
-icscogs2 <- plm(pc1and2intensity~lag(pc1and2intensity,1)+lag(pc1and2intensity,2), data=gfti, model="pooling")
+icscogs2 <- plm(pc1and2intensity~Country+Sector:pCOGS, data=gfti, model="pooling")
 
 
 ################################
@@ -23,10 +24,14 @@ icscogs2 <- plm(pc1and2intensity~lag(pc1and2intensity,1)+lag(pc1and2intensity,2)
 # effect of last year
 # negative means that lower intensity last year leads to increase in current year
 ily1 <- plm(pc1and2intensity~lag(pc1and2intensity, 1), data=gfti, model="pooling")
+ilowly1 <- plm(pc1and2intensity~lag(pc1and2intensity, 1), data=gfti.low, model="pooling")
 # effect broken out by sector, no longer significant
 ily1sector <- plm(pc1and2intensity~Sector:lag(pc1and2intensity, 1), data=gfti, model="pooling")
+ilowly1sector <- plm(pc1and2intensity~Sector:lag(pc1and2intensity, 1), data=gfti.low, model="pooling")
 
 # positive means that lower intensity in previous year leads to lower in current year
 ily2 <- plm(pc1and2intensity~lag(pc1and2intensity,1)+lag(pc1and2intensity,2), data=gfti, model="pooling")
+ilowly2 <- plm(pc1and2intensity~lag(pc1and2intensity,1)+lag(pc1and2intensity,2), data=gfti.low, model="pooling")
 
 ily3 <- plm(pc1and2intensity~lag(pc1and2intensity,1)+lag(pc1and2intensity,2)+lag(pc1and2intensity,3), data=gfti, model="pooling")
+ilowly3 <- plm(pc1and2intensity~lag(pc1and2intensity,1)+lag(pc1and2intensity,2)+lag(pc1and2intensity,3), data=gfti.low, model="pooling")

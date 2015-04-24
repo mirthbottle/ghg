@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
 
 def getvars(p, colname):
     # p is the data for a given year
@@ -11,7 +13,7 @@ def getvars(p, colname):
 
 def getextremes(p, colname, threshold):
     # threshold in number of standard devs
-    return p[abs(p[colname])> threshold]
+    return p[p[colname] < threshold]
 
 def ols_everyear(p, model, filename):
     result={}
