@@ -84,9 +84,9 @@ def getscope_allyears(scope):
 
 def get_yrsdata(p, yr):
     ## use to column because the difference is always one year
-    ## 2013, july 1 2013 to june 30 2014
-    pyr = p[(p["reporting period to"] < dt.date(yr+1,7,1)) &
-            (p["reporting period to"] > dt.date(yr, 6,30))]
+    ## 2013, june 29 2013 to june 30 2014
+    pyr = p[(p["reporting period to"] < dt.date(yr+1,6,30)) &
+            (p["reporting period to"] > dt.date(yr, 6,29))]
     return pyr
 
 ## totals by country headquarters...

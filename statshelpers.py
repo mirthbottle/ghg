@@ -13,7 +13,7 @@ def getvars(p, colname):
 
 def getextremes(p, colname, threshold):
     # threshold in number of standard devs
-    return p[p[colname] < threshold]
+    return p[abs(p[colname]) > threshold]
 
 def ols_everyear(p, model, filename):
     result={}
