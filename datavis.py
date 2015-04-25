@@ -50,3 +50,4 @@ def prep_forhist(p, colname, low, high):
     prepped = p[(p[colname].isnull()==False) &
                 (p[colname]<high) & (p[colname]>low)]
     return prepped
+
