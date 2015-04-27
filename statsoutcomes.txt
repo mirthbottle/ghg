@@ -1,0 +1,212 @@
+Call:
+plm(formula = tform, data = gfti, model = "within")
+
+Unbalanced Panel: n=1116, T=1-5, N=4518
+
+Residuals :
+    Min.  1st Qu.   Median  3rd Qu.     Max. 
+-5.60000 -0.07890 -0.00192  0.07630  5.84000 
+
+Coefficients :
+                                    Estimate  Std. Error t-value  Pr(>|t|)    
+hasintensityTRUE                 -5.0180e-02  1.8257e-02 -2.7485 0.0060185 ** 
+hasabsoluteTRUE                  -3.4985e-02  1.9949e-02 -1.7537 0.0795638 .  
+Revenues                         -1.5904e-08  4.3021e-09 -3.6969 0.0002217 ***
+hasintensityTRUE:hasabsoluteTRUE  5.8452e-02  3.2057e-02  1.8234 0.0683356 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Total Sum of Squares:    462.79
+Residual Sum of Squares: 459.48
+R-Squared      :  0.0071416 
+      Adj. R-Squared :  0.0053712 
+F-statistic: 6.11038 on 4 and 3398 DF, p-value: 6.7603e-05
+
+
+
+
+Call:
+plm(formula = tpform, data = p2, model = "within")
+
+Unbalanced Panel: n=1116, T=1-5, N=4518
+
+Residuals :
+    Min.  1st Qu.   Median  3rd Qu.     Max. 
+-5.60000 -0.07540 -0.00288  0.07580  5.84000 
+
+Coefficients :
+                                                Estimate  Std. Error t-value
+hasintensityTRUE                             -2.1735e-02  1.8862e-02 -1.1523
+hasabsoluteTRUE                              -4.0706e-04  2.1123e-02 -0.0193
+Revenues                                     -1.5258e-08  4.2768e-09 -3.5675
+hasintensityTRUE:plateauTRUE                 -1.8028e-01  1.0169e-01 -1.7728
+hasintensityTRUE:steadyTRUE                  -3.7912e-01  7.8888e-02 -4.8058
+plateauTRUE:hasabsoluteTRUE                  -2.2723e-01  8.0288e-02 -2.8302
+steadyTRUE:hasabsoluteTRUE                   -2.9050e-01  7.6174e-02 -3.8137
+hasintensityTRUE:hasabsoluteTRUE              4.2970e-02  3.3800e-02  1.2713
+hasintensityTRUE:plateauTRUE:hasabsoluteTRUE  1.3891e-01  1.4003e-01  0.9920
+hasintensityTRUE:steadyTRUE:hasabsoluteTRUE   2.1235e-01  1.2888e-01  1.6477
+                                              Pr(>|t|)    
+hasintensityTRUE                             0.2492706    
+hasabsoluteTRUE                              0.9846258    
+Revenues                                     0.0003654 ***
+hasintensityTRUE:plateauTRUE                 0.0763566 .  
+hasintensityTRUE:steadyTRUE                  1.608e-06 ***
+plateauTRUE:hasabsoluteTRUE                  0.0046789 ** 
+steadyTRUE:hasabsoluteTRUE                   0.0001393 ***
+hasintensityTRUE:hasabsoluteTRUE             0.2037069    
+hasintensityTRUE:plateauTRUE:hasabsoluteTRUE 0.3212706    
+hasintensityTRUE:steadyTRUE:hasabsoluteTRUE  0.0995118 .  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Total Sum of Squares:    462.79
+Residual Sum of Squares: 451.13
+R-Squared      :  0.025189 
+      Adj. R-Squared :  0.018911 
+F-statistic: 8.76477 on 10 and 3392 DF, p-value: 2.4812e-14
+
+
+
+
+
+
+Oneway (individual) effect Within Model
+
+Call:
+plm(formula = tp2form, data = p2, model = "within")
+
+Unbalanced Panel: n=1116, T=1-5, N=4518
+
+Residuals :
+    Min.  1st Qu.   Median  3rd Qu.     Max. 
+-5.62000 -0.07620 -0.00334  0.07670  5.84000 
+
+Coefficients :
+                                Estimate  Std. Error t-value  Pr(>|t|)    
+hasintensityTRUE             -9.4377e-03  1.6264e-02 -0.5803 0.5617593    
+hasabsoluteTRUE               1.4210e-02  1.7709e-02  0.8024 0.4223495    
+Revenues                     -1.5689e-08  4.2739e-09 -3.6709 0.0002454 ***
+hasintensityTRUE:plateauTRUE -1.0017e-01  7.4769e-02 -1.3398 0.1804053    
+hasintensityTRUE:steadyTRUE  -3.0555e-01  6.5141e-02 -4.6907 2.831e-06 ***
+plateauTRUE:hasabsoluteTRUE  -1.9663e-01  7.1746e-02 -2.7406 0.0061644 ** 
+steadyTRUE:hasabsoluteTRUE   -2.2319e-01  6.4494e-02 -3.4607 0.0005455 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Total Sum of Squares:    462.79
+Residual Sum of Squares: 452.2
+R-Squared      :  0.022873 
+      Adj. R-Squared :  0.017187 
+F-statistic: 11.3528 on 7 and 3395 DF, p-value: 2.6426e-14
+
+so actually, interactions between intensity targets and absolute targets aren't a big deal
+intensity targets are more effective for steady reducers
+absolute targets are effective for plateaus
+
+
+
+
+plm(formula = spform, data = p2, model = "within")
+lnintensity ~ pCOGS + pCOGS * plateau + pCOGS * steady + pPPE + 
+    pPPE * plateau + pPPE * steady + pCOGS * pPPE + pCOGS * pPPE * 
+    plateau + pCOGS * pPPE * steady + Revenues + ROE
+
+Unbalanced Panel: n=1116, T=1-5, N=4517
+
+Residuals :
+    Min.  1st Qu.   Median  3rd Qu.     Max. 
+-5.61000 -0.08060 -0.00376  0.07800  5.84000 
+
+Coefficients :
+                          Estimate  Std. Error t-value  Pr(>|t|)    
+pCOGS                   2.5321e-01  2.0310e-01  1.2467 0.2125808    
+pPPE                    5.6851e-01  3.2473e-01  1.7507 0.0800831 .  
+Revenues               -1.6316e-08  4.3011e-09 -3.7934 0.0001512 ***
+ROE                    -9.8218e-04  4.1543e-03 -0.2364 0.8131185    
+pCOGS:plateauTRUE      -1.9567e-01  1.7293e+00 -0.1132 0.9099181    
+pCOGS:steadyTRUE       -2.4050e+00  7.6889e-01 -3.1279 0.0017756 ** 
+plateauTRUE:pPPE        4.1857e-01  1.7457e+00  0.2398 0.8105217    
+steadyTRUE:pPPE        -1.4898e+00  8.9472e-01 -1.6651 0.0959886 .  
+pCOGS:pPPE             -2.3695e-01  4.6147e-01 -0.5135 0.6076521    
+pCOGS:plateauTRUE:pPPE -7.7380e-01  3.2766e+00 -0.2362 0.8133254    
+pCOGS:steadyTRUE:pPPE   3.5574e+00  1.2591e+00  2.8252 0.0047523 ** 
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Total Sum of Squares:    462.79
+Residual Sum of Squares: 457.8
+R-Squared      :  0.010771 
+      Adj. R-Squared :  0.0080834 
+F-statistic: 3.35546 on 11 and 3390 DF, p-value: 0.00012644
+
+having higher pPPE and higher pCOGS actually increases emissions intensity
+but not for those companies that are steady reducers...having high pCOGS or pPPE leads to reductions, but having both high leads to increases
+
+
+
+
+
+
+
+
+Call:
+plm(formula = iipform, data = p2, model = "within")
+lnintensity~(hasintensity+hasabsolute)*(pCOGS+pPPE+pCOGS*pPPE)*(plateau+steady)+ Revenues+ROE
+
+Unbalanced Panel: n=1116, T=1-5, N=4517
+
+Residuals :
+    Min.  1st Qu.   Median  3rd Qu.     Max. 
+-5.61000 -0.07750 -0.00241  0.07610  5.84000 
+
+Coefficients :
+                                           Estimate  Std. Error t-value  Pr(>|t|)    
+hasintensityTRUE                        -7.8760e-02  7.5359e-02 -1.0451 0.2960364    
+hasabsoluteTRUE                         -4.3211e-02  7.6709e-02 -0.5633 0.5732589    
+pCOGS                                    1.7763e-01  2.1129e-01  0.8407 0.4005678    
+pPPE                                     3.9715e-01  3.3522e-01  1.1847 0.2362090    
+Revenues                                -1.5526e-08  4.2819e-09 -3.6258 0.0002923 ***
+ROE                                     -8.7927e-04  4.1238e-03 -0.2132 0.8311690    
+pCOGS:pPPE                               4.8053e-02  4.7753e-01  0.1006 0.9198514    
+hasintensityTRUE:pCOGS                   1.1593e-01  1.1974e-01  0.9682 0.3330173    
+hasintensityTRUE:pPPE                    2.2642e-01  2.0910e-01  1.0828 0.2789590    
+hasabsoluteTRUE:pCOGS                    1.1725e-01  1.2083e-01  0.9704 0.3319204    
+hasabsoluteTRUE:pPPE                     2.8923e-01  2.0130e-01  1.4369 0.1508526    
+hasintensityTRUE:plateauTRUE             3.2653e-02  5.0158e-01  0.0651 0.9480977    
+hasintensityTRUE:steadyTRUE             -4.5639e-01  4.2528e-01 -1.0732 0.2832747    
+hasabsoluteTRUE:plateauTRUE             -3.3700e-01  4.0457e-01 -0.8330 0.4049207    
+hasabsoluteTRUE:steadyTRUE               2.7624e-01  3.2694e-01  0.8449 0.3982128    
+pCOGS:plateauTRUE                        5.6377e-01  1.7680e+00  0.3189 0.7498398    
+pCOGS:steadyTRUE                        -2.0195e+00  7.8016e-01 -2.5886 0.0096791 ** 
+pPPE:plateauTRUE                         1.2258e+00  1.8041e+00  0.6795 0.4968959    
+pPPE:steadyTRUE                         -1.1171e+00  9.2436e-01 -1.2085 0.2269537    
+hasintensityTRUE:pCOGS:pPPE             -3.6146e-01  3.3507e-01 -1.0788 0.2807586    
+hasabsoluteTRUE:pCOGS:pPPE              -5.4357e-01  3.2790e-01 -1.6577 0.0974652 .  
+pCOGS:pPPE:plateauTRUE                  -2.3304e+00  3.4113e+00 -0.6832 0.4945519    
+pCOGS:pPPE:steadyTRUE                    2.7671e+00  1.2933e+00  2.1396 0.0324587 *  
+hasintensityTRUE:pCOGS:plateauTRUE      -3.2790e-01  7.4043e-01 -0.4429 0.6579000    
+hasintensityTRUE:pCOGS:steadyTRUE        5.6567e-01  6.6407e-01  0.8518 0.3943722    
+hasintensityTRUE:pPPE:plateauTRUE        4.2126e-02  2.4095e+00  0.0175 0.9860521    
+hasintensityTRUE:pPPE:steadyTRUE         1.0292e+00  1.0389e+00  0.9906 0.3219321    
+hasabsoluteTRUE:pCOGS:plateauTRUE        1.8429e-01  6.1893e-01  0.2978 0.7659103    
+hasabsoluteTRUE:pCOGS:steadyTRUE        -8.7612e-01  5.2390e-01 -1.6723 0.0945556 .  
+hasabsoluteTRUE:pPPE:plateauTRUE        -4.3116e-01  2.3716e+00 -0.1818 0.8557507    
+hasabsoluteTRUE:pPPE:steadyTRUE         -1.4724e+00  7.0562e-01 -2.0867 0.0369942 *  
+hasintensityTRUE:pCOGS:pPPE:plateauTRUE  3.5378e-01  3.1876e+00  0.1110 0.9116325    
+hasintensityTRUE:pCOGS:pPPE:steadyTRUE  -2.8416e+00  1.6379e+00 -1.7349 0.0828468 .  
+hasabsoluteTRUE:pCOGS:pPPE:plateauTRUE   7.6475e-01  3.1202e+00  0.2451 0.8063966    
+hasabsoluteTRUE:pCOGS:pPPE:steadyTRUE    2.7098e+00  1.2391e+00  2.1869 0.0288215 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Total Sum of Squares:    462.79
+Residual Sum of Squares: 447.16
+R-Squared      :  0.033776 
+      Adj. R-Squared :  0.025169 
+F-statistic: 3.36183 on 35 and 3366 DF, p-value: 1.2077e-10
+
+steady companies have the most significant data
+more pCOGS reduces emissions for steady companies
+emissions increase for those with high pCOGS and high pPPE, though
+unless they have intensity targets...

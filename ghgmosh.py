@@ -156,31 +156,6 @@ def add_yearindex(p, year):
     return p
 
 
-def compute_percent_changes(p, colname):
-    companies = p.index.levels[0].tolist()
-    pieces = []
-    for c in companies:
-        try:
-            f = p.loc[c]
-            f = percent_change(f, colname)
-            f["Organisation"] = c
-            pieces.append(f)
-        except Exception:
-            print c
-            pass
-    newp = pd.concat(pieces).reset_index().set_index(["Organisation", "year"])
-    return newp
-
-# compute annual percent change...
-def percent_change(f, colname):
-    newcolname = "percent change " + colname
-    f[newcolname] = 0
-    yearswithdata = f.index.tolist()
-    for i in range(2010, 2014):
-        if i in yearswithdata and i-1 in yearswithdata:
-            f.loc[i, newcolname] = f.loc[i,colname]/f.loc[i-1,colname] - 1
-    return f
-
 ###### separate out companies with different emissions profiles
 
 ## # get companies that overall reduced emissions by 2014, and separate them into systemic vs large emissions reductions
