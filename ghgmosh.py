@@ -7,7 +7,9 @@ import datetime as dt
 # starting 2012, GICS Sector Banks was renamed to Financials, ughh
 # emissions in tons CO2e
 # year 2010, 2011, and 2012 doesn't have isins, only organisation and ticker
+
 # 2014 sheet 43 has Scope 1 data breakdown by country
+# column 16 has country, 17 has tons
 
 def write_json(p, filename):
     index1s = p.index.levels[0]
@@ -155,6 +157,31 @@ def add_yearindex(p, year):
     p.set_index('year', append=True, inplace=True)
     return p
 
+
+def compute_percent_changes(p, colname):
+    companies = p.index.levels[0].tolist()
+    pieces = []
+    for c in companies:
+        try:
+            f = p.loc[c]
+            f = percent_change(f, colname)
+            f["Organisation"] = c
+            pieces.append(f)
+        except Exception:
+            print c
+            pass
+    newp = pd.concat(pieces).reset_index().set_index(["Organisation", "year"])
+    return newp
+
+# compute annual percent change...
+def percent_change(f, colname):
+    newcolname = "percent change " + colname
+    f[newcolname] = 0
+    yearswithdata = f.index.tolist()
+    for i in range(2010, 2014):
+        if i in yearswithdata and i-1 in yearswithdata:
+            f.loc[i, newcolname] = f.loc[i,colname]/f.loc[i-1,colname] - 1
+    return f
 
 ###### separate out companies with different emissions profiles
 

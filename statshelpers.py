@@ -24,3 +24,8 @@ def ols_everyear(p, model, filename):
         f.write(result[yr].summary().as_text())
         f.close()
     return result
+
+
+def exclude_cos(p, cos):
+    newp = p[~p["Organisation"].isin(set(cos))]
+    return newp

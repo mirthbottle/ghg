@@ -22,6 +22,20 @@ def scatter_groups(xyvalues, fname, title, xlabel, ylabel):
     return scatter
 
 
+def prep_stacked_bar(df, cats):
+    # show max 10 categories (out of colors)
+    pdict = OrderedDict()
+    i = 0
+    for c in cats:
+        if i < 10:
+            pdict[c] = df[c].values.tolist() + [0.0, 0.0]
+            df = df.drop(c, 1)
+            i=i+1
+        else:
+            pdict["Other"] = df.sum(1).values.tolist() + [0.0, 0.0]
+            break
+    return pdict
+
 def stacked_cols(df, categories):
     # where data for a category is in a separate column
     areas = OrderedDict()
