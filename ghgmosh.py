@@ -20,12 +20,12 @@ def write_json(p, filename):
     for i1 in index1s:
         group = p.loc[i1]
         itotal = round(group.sum().values[0], 3)
-        child1 = {"name": str(i1), "size": itotal, "children": []}
+        child1 = {"name": i1.encode("ascii","ignore"), "size": itotal, "children": []}
         # there must be children
         index2s = p.loc[i1].index
         for i2 in index2s:
             s = round(group.loc[i2].values[0], 3)
-            child2 = {"name": str(i2), "size": s}
+            child2 = {"name": i2.encode("ascii","ignore"), "size": s}
             child1["children"].append(child2)
         data["children"].append(child1)
     f = open(filename, 'w')
