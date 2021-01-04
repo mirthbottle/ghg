@@ -1,51 +1,49 @@
-{
-  "name": "global ghg sources",
-  "children": [
+[
   {
-    "name": "Brazil",
-    "size": 1063.6,
+    "name": "Other",
+    "size": 18213.47,
     "children": [
       {
-        "name": "agriculture",
-        "size": 505.95
-      },
-      {
         "name": "energy",
-        "size": 459.15,
+        "size": 13177.769999999997,
         "children": [
           {
-            "name": "transportation",
-            "size": 200.02
-          },
-          {
             "name": "electricity",
-            "size": 97.86
+            "size": 9674.23
           },
           {
             "name": "manufacturing",
-            "size": 90.5
+            "size": 1610.9799999999996
+          },
+          {
+            "name": "transportation",
+            "size": 4089.1499999999996
           },
           {
             "name": "other fuels",
-            "size": 41.76
+            "size": 775.86
           },
           {
             "name": "fugitive",
-            "size": 8.52
+            "size": 875.8599999999999
           }
         ]
       },
       {
-        "name": "waste",
-        "size": 69.55
+        "name": "industrial processes",
+        "size": 1073.7300000000002
       },
       {
-        "name": "industrial processes",
-        "size": 28.94
+        "name": "agriculture",
+        "size": 3163.6100000000006
+      },
+      {
+        "name": "waste",
+        "size": 798.3499999999999
       },
       {
         "name": "fuels",
-        "size": 25.78
+        "size": 552.79
       }
     ]
   },
@@ -90,294 +88,6 @@
       {
         "name": "fuels",
         "size": 143.04
-      }
-    ]
-  },
-  {
-    "name": "Germany",
-    "size": 832.66,
-    "children": [
-      {
-        "name": "energy",
-        "size": 736.52,
-        "children": [
-          {
-            "name": "electricity",
-            "size": 327.74
-          },
-          {
-            "name": "transportation",
-            "size": 163.49
-          },
-          {
-            "name": "manufacturing",
-            "size": 95.14
-          },
-          {
-            "name": "other fuels",
-            "size": 11.07
-          },
-          {
-            "name": "fugitive",
-            "size": 7.51
-          }
-        ]
-      },
-      {
-        "name": "agriculture",
-        "size": 60.97
-      },
-      {
-        "name": "fuels",
-        "size": 29.25
-      },
-      {
-        "name": "industrial processes",
-        "size": 26.12
-      },
-      {
-        "name": "waste",
-        "size": 9.06
-      }
-    ]
-  },
-  {
-    "name": "India",
-    "size": 3230.27,
-    "children": [
-      {
-        "name": "energy",
-        "size": 2307.82,
-        "children": [
-          {
-            "name": "electricity",
-            "size": 1157.77
-          },
-          {
-            "name": "manufacturing",
-            "size": 558.99
-          },
-          {
-            "name": "transportation",
-            "size": 291.23
-          },
-          {
-            "name": "other fuels",
-            "size": 131.14
-          },
-          {
-            "name": "fugitive",
-            "size": 54.94
-          }
-        ]
-      },
-      {
-        "name": "agriculture",
-        "size": 709.86
-      },
-      {
-        "name": "industrial processes",
-        "size": 130.52
-      },
-      {
-        "name": "waste",
-        "size": 82.07
-      },
-      {
-        "name": "fuels",
-        "size": 45.59
-      }
-    ]
-  },
-  {
-    "name": "Indonesia",
-    "size": 912.33,
-    "children": [
-      {
-        "name": "energy",
-        "size": 548.51,
-        "children": [
-          {
-            "name": "electricity",
-            "size": 218.73
-          },
-          {
-            "name": "transportation",
-            "size": 141.68
-          },
-          {
-            "name": "manufacturing",
-            "size": 99.55
-          },
-          {
-            "name": "other fuels",
-            "size": 32.65
-          },
-          {
-            "name": "fugitive",
-            "size": 30.94
-          }
-        ]
-      },
-      {
-        "name": "agriculture",
-        "size": 195.98
-      },
-      {
-        "name": "waste",
-        "size": 131.65
-      },
-      {
-        "name": "industrial processes",
-        "size": 36.19
-      },
-      {
-        "name": "fuels",
-        "size": 11.75
-      }
-    ]
-  },
-  {
-    "name": "Iran",
-    "size": 814.73,
-    "children": [
-      {
-        "name": "energy",
-        "size": 704.87,
-        "children": [
-          {
-            "name": "electricity",
-            "size": 201.58
-          },
-          {
-            "name": "transportation",
-            "size": 134.83
-          },
-          {
-            "name": "fugitive",
-            "size": 127.68
-          },
-          {
-            "name": "manufacturing",
-            "size": 96.77
-          },
-          {
-            "name": "other fuels",
-            "size": 19.4
-          }
-        ]
-      },
-      {
-        "name": "waste",
-        "size": 46.04
-      },
-      {
-        "name": "agriculture",
-        "size": 32.4
-      },
-      {
-        "name": "industrial processes",
-        "size": 31.43
-      },
-      {
-        "name": "fuels",
-        "size": 14.22
-      }
-    ]
-  },
-  {
-    "name": "Japan",
-    "size": 1235.32,
-    "children": [
-      {
-        "name": "energy",
-        "size": 1135.35,
-        "children": [
-          {
-            "name": "electricity",
-            "size": 589.35
-          },
-          {
-            "name": "transportation",
-            "size": 207.07
-          },
-          {
-            "name": "manufacturing",
-            "size": 196.8
-          },
-          {
-            "name": "other fuels",
-            "size": 24.4
-          },
-          {
-            "name": "fugitive",
-            "size": 2.3
-          }
-        ]
-      },
-      {
-        "name": "industrial processes",
-        "size": 71.59
-      },
-      {
-        "name": "fuels",
-        "size": 30.71
-      },
-      {
-        "name": "agriculture",
-        "size": 21.45
-      },
-      {
-        "name": "waste",
-        "size": 6.92
-      }
-    ]
-  },
-  {
-    "name": "Russia",
-    "size": 2496.29,
-    "children": [
-      {
-        "name": "energy",
-        "size": 2227.22,
-        "children": [
-          {
-            "name": "electricity",
-            "size": 835.58
-          },
-          {
-            "name": "fugitive",
-            "size": 682.36
-          },
-          {
-            "name": "manufacturing",
-            "size": 262.09
-          },
-          {
-            "name": "transportation",
-            "size": 246.06
-          },
-          {
-            "name": "other fuels",
-            "size": 22.71
-          }
-        ]
-      },
-      {
-        "name": "waste",
-        "size": 116.48
-      },
-      {
-        "name": "agriculture",
-        "size": 97.69
-      },
-      {
-        "name": "industrial processes",
-        "size": 54.91
-      },
-      {
-        "name": "fuels",
-        "size": 28.73
       }
     ]
   },
@@ -430,52 +140,339 @@
     ]
   },
   {
-    "name": "Other",
-    "size": 18213.47,
+    "name": "India",
+    "size": 3230.27,
     "children": [
       {
         "name": "energy",
-        "size": 13177.769999999997,
+        "size": 2307.82,
         "children": [
           {
             "name": "electricity",
-            "size": 9674.23
+            "size": 1157.77
           },
           {
             "name": "manufacturing",
-            "size": 1610.9799999999996
+            "size": 558.99
           },
           {
             "name": "transportation",
-            "size": 4089.1499999999996
+            "size": 291.23
           },
           {
             "name": "other fuels",
-            "size": 775.86
+            "size": 131.14
           },
           {
             "name": "fugitive",
-            "size": 875.8599999999999
+            "size": 54.94
+          }
+        ]
+      },
+      {
+        "name": "agriculture",
+        "size": 709.86
+      },
+      {
+        "name": "industrial processes",
+        "size": 130.52
+      },
+      {
+        "name": "waste",
+        "size": 82.07
+      },
+      {
+        "name": "fuels",
+        "size": 45.59
+      }
+    ]
+  },
+  {
+    "name": "Russia",
+    "size": 2496.29,
+    "children": [
+      {
+        "name": "energy",
+        "size": 2227.22,
+        "children": [
+          {
+            "name": "electricity",
+            "size": 835.58
+          },
+          {
+            "name": "fugitive",
+            "size": 682.36
+          },
+          {
+            "name": "manufacturing",
+            "size": 262.09
+          },
+          {
+            "name": "transportation",
+            "size": 246.06
+          },
+          {
+            "name": "other fuels",
+            "size": 22.71
+          }
+        ]
+      },
+      {
+        "name": "waste",
+        "size": 116.48
+      },
+      {
+        "name": "agriculture",
+        "size": 97.69
+      },
+      {
+        "name": "industrial processes",
+        "size": 54.91
+      },
+      {
+        "name": "fuels",
+        "size": 28.73
+      }
+    ]
+  },
+  {
+    "name": "Japan",
+    "size": 1235.32,
+    "children": [
+      {
+        "name": "energy",
+        "size": 1135.35,
+        "children": [
+          {
+            "name": "electricity",
+            "size": 589.35
+          },
+          {
+            "name": "transportation",
+            "size": 207.07
+          },
+          {
+            "name": "manufacturing",
+            "size": 196.8
+          },
+          {
+            "name": "other fuels",
+            "size": 24.4
+          },
+          {
+            "name": "fugitive",
+            "size": 2.3
           }
         ]
       },
       {
         "name": "industrial processes",
-        "size": 1073.7300000000002
-      },
-      {
-        "name": "agriculture",
-        "size": 3163.6100000000006
-      },
-      {
-        "name": "waste",
-        "size": 798.3499999999999
+        "size": 71.59
       },
       {
         "name": "fuels",
-        "size": 552.79
+        "size": 30.71
+      },
+      {
+        "name": "agriculture",
+        "size": 21.45
+      },
+      {
+        "name": "waste",
+        "size": 6.92
+      }
+    ]
+  },
+  {
+    "name": "Brazil",
+    "size": 1063.6,
+    "children": [
+      {
+        "name": "agriculture",
+        "size": 505.95
+      },
+      {
+        "name": "energy",
+        "size": 459.15,
+        "children": [
+          {
+            "name": "transportation",
+            "size": 200.02
+          },
+          {
+            "name": "electricity",
+            "size": 97.86
+          },
+          {
+            "name": "manufacturing",
+            "size": 90.5
+          },
+          {
+            "name": "other fuels",
+            "size": 41.76
+          },
+          {
+            "name": "fugitive",
+            "size": 8.52
+          }
+        ]
+      },
+      {
+        "name": "waste",
+        "size": 69.55
+      },
+      {
+        "name": "industrial processes",
+        "size": 28.94
+      },
+      {
+        "name": "fuels",
+        "size": 25.78
+      }
+    ]
+  },
+  {
+    "name": "Indonesia",
+    "size": 912.33,
+    "children": [
+      {
+        "name": "energy",
+        "size": 548.51,
+        "children": [
+          {
+            "name": "electricity",
+            "size": 218.73
+          },
+          {
+            "name": "transportation",
+            "size": 141.68
+          },
+          {
+            "name": "manufacturing",
+            "size": 99.55
+          },
+          {
+            "name": "other fuels",
+            "size": 32.65
+          },
+          {
+            "name": "fugitive",
+            "size": 30.94
+          }
+        ]
+      },
+      {
+        "name": "agriculture",
+        "size": 195.98
+      },
+      {
+        "name": "waste",
+        "size": 131.65
+      },
+      {
+        "name": "industrial processes",
+        "size": 36.19
+      },
+      {
+        "name": "fuels",
+        "size": 11.75
+      }
+    ]
+  },
+  {
+    "name": "Germany",
+    "size": 832.66,
+    "children": [
+      {
+        "name": "energy",
+        "size": 736.52,
+        "children": [
+          {
+            "name": "electricity",
+            "size": 327.74
+          },
+          {
+            "name": "transportation",
+            "size": 163.49
+          },
+          {
+            "name": "manufacturing",
+            "size": 95.14
+          },
+          {
+            "name": "other fuels",
+            "size": 11.07
+          },
+          {
+            "name": "fugitive",
+            "size": 7.51
+          }
+        ]
+      },
+      {
+        "name": "agriculture",
+        "size": 60.97
+      },
+      {
+        "name": "fuels",
+        "size": 29.25
+      },
+      {
+        "name": "industrial processes",
+        "size": 26.12
+      },
+      {
+        "name": "waste",
+        "size": 9.06
+      }
+    ]
+  },
+  {
+    "name": "Iran",
+    "size": 814.73,
+    "children": [
+      {
+        "name": "energy",
+        "size": 704.87,
+        "children": [
+          {
+            "name": "electricity",
+            "size": 201.58
+          },
+          {
+            "name": "transportation",
+            "size": 134.83
+          },
+          {
+            "name": "fugitive",
+            "size": 127.68
+          },
+          {
+            "name": "manufacturing",
+            "size": 96.77
+          },
+          {
+            "name": "other fuels",
+            "size": 19.4
+          }
+        ]
+      },
+      {
+        "name": "waste",
+        "size": 46.04
+      },
+      {
+        "name": "agriculture",
+        "size": 32.4
+      },
+      {
+        "name": "industrial processes",
+        "size": 31.43
+      },
+      {
+        "name": "fuels",
+        "size": 14.22
       }
     ]
   }
 ]
-}
