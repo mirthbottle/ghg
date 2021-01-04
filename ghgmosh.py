@@ -7,7 +7,9 @@ import datetime as dt
 # starting 2012, GICS Sector Banks was renamed to Financials, ughh
 # emissions in tons CO2e
 # year 2010, 2011, and 2012 doesn't have isins, only organisation and ticker
+
 # 2014 sheet 43 has Scope 1 data breakdown by country
+# column 16 has country, 17 has tons
 
 def write_json(p, filename):
     index1s = p.index.levels[0]
@@ -18,12 +20,12 @@ def write_json(p, filename):
     for i1 in index1s:
         group = p.loc[i1]
         itotal = round(group.sum().values[0], 3)
-        child1 = {"name": str(i1), "size": itotal, "children": []}
+        child1 = {"name": i1.encode("ascii","ignore"), "size": itotal, "children": []}
         # there must be children
         index2s = p.loc[i1].index
         for i2 in index2s:
             s = round(group.loc[i2].values[0], 3)
-            child2 = {"name": str(i2), "size": s}
+            child2 = {"name": i2.encode("ascii","ignore"), "size": s}
             child1["children"].append(child2)
         data["children"].append(child1)
     f = open(filename, 'w')
@@ -66,11 +68,27 @@ def get_scope1or2(scope, year):
     p = p.set_index(pcols[0])
     return p
 
+def getscope_allyears(scope):
+    pyrs={}
+    for iyr in range(2010, 2015): 
+        p = get_scope1or2(scope,iyr)
+        p["reporting period to"] = pd.to_datetime(p['Reporting Period\nTo'])
+        ptemp = {}
+        for jyr in range(2009,2016):
+            ptemp[jyr] = get_yrsdata(p, jyr)
+            ptemp[jyr]["year"] = jyr
+        pyrs[iyr] = pd.concat(ptemp.values())
+    pall = pd.concat(pyrs.values())
+    # delete duplicates
+    pall = pall.reset_index().drop_duplicates(["Organisation","year"])
+    pall = pall.set_index(['Organisation','year']).sort_index()
+    return pall
+
 def get_yrsdata(p, yr):
     ## use to column because the difference is always one year
-    ## 2013, june 30 2013 to july 1 2014
+    ## 2013, june 29 2013 to june 30 2014
     pyr = p[(p["reporting period to"] < dt.date(yr+1,6,30)) &
-            (p["reporting period to"] > dt.date(yr, 7,1))]
+            (p["reporting period to"] > dt.date(yr, 6,29))]
     return pyr
 
 ## totals by country headquarters...
@@ -162,7 +180,7 @@ def percent_change(f, colname):
     yearswithdata = f.index.tolist()
     for i in range(2010, 2014):
         if i in yearswithdata and i-1 in yearswithdata:
-            f.loc[i, newcolname] = 1 - f.loc[i,colname]/f.loc[i-1,colname]
+            f.loc[i, newcolname] = f.loc[i,colname]/f.loc[i-1,colname] - 1
     return f
 
 ###### separate out companies with different emissions profiles

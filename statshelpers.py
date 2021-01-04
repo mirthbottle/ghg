@@ -1,5 +1,7 @@
 import pandas as pd
 import numpy as np
+import statsmodels.api as sm
+import statsmodels.formula.api as smf
 
 def getvars(p, colname):
     # p is the data for a given year
@@ -11,4 +13,19 @@ def getvars(p, colname):
 
 def getextremes(p, colname, threshold):
     # threshold in number of standard devs
-    return p[abs(p[colname])> threshold]
+    return p[abs(p[colname]) > threshold]
+
+def ols_everyear(p, model, filename):
+    result={}
+    for yr in range(2010,2014):
+        result[yr] = smf.ols(formula=model, data=p.loc[yr]).fit()
+        f = open("../CDPdata/" + filename + str(yr) + ".txt", 'w')
+        f.write(model)
+        f.write(result[yr].summary().as_text())
+        f.close()
+    return result
+
+
+def exclude_cos(p, cos):
+    newp = p[~p["Organisation"].isin(set(cos))]
+    return newp
