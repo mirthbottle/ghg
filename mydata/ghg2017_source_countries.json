@@ -58,6 +58,10 @@
         "size": 10037.65,
         "children": [
           {
+            "name": "electricity",
+            "size": 5439
+          },
+          {
             "name": "manufacturing",
             "size": 2734.18
           },
