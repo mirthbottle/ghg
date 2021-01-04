@@ -1,4 +1,6 @@
-[
+{
+  "name": "global ghg sources",
+  "children": [
   {
     "name": "Other",
     "size": 18213.47,
@@ -476,3 +478,5 @@
     ]
   }
 ]
+
+}
