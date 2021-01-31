@@ -435,7 +435,7 @@ function inSun(root, width, minsize) {
 function selectFile(dataset){
   
   if (dataset == "source"){
-    var file = "/mydata/demo_emissions.json";
+    var file = "/mydata/ghg2011_source_countries.json";
     var minsize = 300;
   }
   else if (dataset == "scope1"){
