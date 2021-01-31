@@ -14,8 +14,8 @@
     <div class="container">
       <div class="jumbotron" id="midsection">
 	<h1> GHG Emissions Vistas</h1>
-	<h5> There are many ways to combat climate change since GHG emissions is a byproduct of most of our activities.  Does the transportation system or buildings result in more emissions?  Is it different for different states?  Are the end users the private sector, public sector, or residents?  Global GHG emissions can be organized by process, jurisdiction, products and services, industry, type of end user, company, etc.  Students and young professionals may be able to benefit from a visualization tool to help them choose between fields and specializations.</h5><br>
-	<h5>Below are examples of ways to visualize GHG emissions using two datasets. View1 groups emissions by the innermost ring.  View2 regroups emissions by the second ring.</h5>
+	<h4> There are many ways to combat climate change since GHG emissions is a byproduct of most of our activities.  Does the transportation system or buildings result in more emissions?  Is it different for different states?  Are the end users the private sector, public sector, or residents?  Global GHG emissions can be organized by process, jurisdiction, products and services, industry, type of end user, company, etc.  Students and young professionals may be able to benefit from a visualization tool to help them choose between fields and specializations.</h4><br>
+	<h4>Below are examples of ways to visualize GHG emissions using two datasets. View1 groups emissions by the innermost ring.  View2 regroups emissions by the second ring.</h4>
       </div>
       <p> Play with the buttons!  Mouse over to see the amounts of emissions in each category.</p>
       <div align="center">
@@ -44,7 +44,7 @@
   </body>
   <script>
     var width = document.getElementById("midsection").offsetWidth;
-    var file = "/ghg/mydata/demo_emissions.json";
+    var file = "/ghg/mydata/ghg2011_source_countries.json";
     // var file = "/scope3catsectors.json";
     var svg = d3.select("#chart").append("svg");
     var chart;
