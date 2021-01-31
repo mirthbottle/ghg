@@ -15,13 +15,12 @@
     <div class="container">
       <div class="jumbotron" id="midsection">
 	<h1> GHG Emissions Vistas</h1>
-	<h5> There are many ways to combat climate change since GHG emissions is a byproduct of most of our activities.  Does the transportation system or buildings result in more emissions?  Is it different for different states?  Are the end users the private sector, public sector, or residents?  Global GHG emissions can be organized by process, jurisdiction, products and services, industry, type of end user, company, etc.  Students and young professionals may be able to benefit from a visualization tool to help them choose between fields and specializations.</h5><br>
-	<h5>Below are examples of ways to visualize GHG emissions using two datasets. View1 groups emissions by the innermost ring.  View2 regroups emissions by the second ring.</h5>
+	<h5> There are many ways to combat climate change since GHG emissions is a byproduct of most of our activities. GHG emissions could be accounted according to process, jurisdiction, products and services, industry, type of end user, company, etc. Students and young professionals may be able to benefit from a visualization tool to help them choose between fields and specializations. Is it a bigger impact to work on climate policy in US or China? What about the transportation policy in the US compared to other countries? Perhaps one would have bigger impact working on technology for reducing emissions from energy generation that could eventually be adopted anywhere.  </h5><br>
+	<h5>Below are examples of ways to visualize GHG emissions. View1 groups emissions by the innermost ring.  View2 regroups emissions by the second ring.</h5>
       </div>
-      <p> Play with the buttons!  Mouse over to see the amounts of emissions in each category.</p>
+      <p> Mouse over to see the amounts of emissions in each category.</p>
       <div align="center">
 	<div class="btn-group" style="margin:20px">
-	  <button id="source" class="btn btn-default btn-lg active" onclick="change_display('source')">Global 2017 Source Data</button>
 	  <!--<button id="enduse" class="btn btn-default btn-lg" onclick="change_display('enduse')">US 2011 End Use Data</button>
 	  <button id="scope1" class="btn btn-default btn-lg" onclick="change_display('scope1')">Global Company 2013 Scope 1 Data Reported</button>
 	  <button id="scope2" class="btn btn-default btn-lg" onclick="change_display('scope2')">Global Company 2013 Scope2 Data Reported</button>-->
@@ -30,12 +29,9 @@
       </div>
       <input id="dataset" type="hidden" value="source"></input>
       <div id="chart" align="middle"></div>
-      <h2>Global 2017 Source Data is from</h2>
+      <h2>Global 2017 Source Data is from <a href="https://www.climatewatchdata.org/data-explorer/historical-emissions?historical-emissions-data-sources=cait&historical-emissions-gases=&historical-emissions-regions=&historical-emissions-sectors=&page=1&sort_col=sector&sort_dir=DESC">Climate Watch</a></h2>
       <h4>Total GHG Emissions Excluding Land-Use Change and Forestry (MtCO2e)</h4>
-      <p>WRI, CAIT 2.0. 2014. Climate Analysis Indicators Tool: WRI's Climate Data Explorer. Washington, DC: World Resources Institute. Available at: <a href="http://cait2.wri.org">http://cait2.wri.org</a></p>
-      <h2>US 2011 End Use Data is from</h2>
-      <h4>Table 2-12: U.S. Greenhouse Gas Emissions Allocated to Economic Sectors (Tg CO2 Eq. and Percent of Total in 2011)</h4>
-      <p>EPA, US GHG Inventory 2013: Chapter 2 Trends in Greenhouse Gas Emissions. Washington, DC: EPA. Available at: <a href="http://www.epa.gov/climatechange/Downloads/ghgemissions/US-GHG-Inventory-2013-Chapter-2-Trends.pdf">http://www.epa.gov/climatechange/Downloads/ghgemissions/US-GHG-Inventory-2013-Chapter-2-Trends.pdf</a></p>
+      
       <!--
       <h2>Global Company Data is from</h2>
       <h4>CDP 2014</h4>
